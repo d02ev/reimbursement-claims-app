@@ -1,8 +1,8 @@
 {
   "name": "reimbursement-claims",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "a simple and minimal reimbursement claim web app",
+  "author": "Vikramaditya Pratap Singh",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
