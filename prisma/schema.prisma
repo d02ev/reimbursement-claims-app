@@ -35,7 +35,7 @@ model Claim {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  date          DateTime
+  date          String
   type          String
   requestedAmt  Float
   approvedAmt   Float    @default(0)
