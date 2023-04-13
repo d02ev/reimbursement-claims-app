@@ -39,12 +39,13 @@ model Claim {
   type          String
   requestedAmt  Float
   approvedAmt   Float    @default(0)
-  currency      String
-  receipt       String   @default("Not Attached")
+  currency      String?  @default("INR")
+  receipt       String?   @default("Not Attached")
   requestPhase  String   @default("In Process")
   isApproved    Boolean  @default(false)
   approvedBy    String   @default("")
-  internalNotes String?
+  declinedBy    String   @default("")
+  internalNotes String?  @default("")
 
   user        User   @relation(fields: [requestedBy], references: [id])
   requestedBy String
