@@ -81,7 +81,5 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  @ValidateIf((object: CreateUserDto) => object.password !== undefined)
-  @Equals('password', { message: 'Passwords Do Not Match!' })
   confirmPassword: string;
 }
