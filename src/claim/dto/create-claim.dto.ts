@@ -1,4 +1,9 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumberString,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { ClaimType, Currency } from '../enum';
 
 export class CreateClaimDto {
@@ -13,16 +18,11 @@ export class CreateClaimDto {
   })
   type = ClaimType.MISC;
 
-  @IsNumber(
-    {
-      maxDecimalPlaces: 2,
-    },
-    { message: 'Amount Can Only Be A Valid Number!' },
-  )
+  @IsNumberString({}, { message: 'Amount Can Only Be A Valid Number!' })
   @IsNotEmpty({
     message: 'Requested Amount Is Required!',
   })
-  requestedAmt: number;
+  requestedAmt: string;
 
   @IsString({
     message: 'Currency Can Only Be INR, USD or EURO!',
@@ -31,9 +31,7 @@ export class CreateClaimDto {
 
   @IsString()
   @IsOptional()
-  receipt: 'Not Attached!';
+  receipt = 'Not Attached!';
 
-  @IsString()
-  @IsNotEmpty()
   requestedBy: string;
 }

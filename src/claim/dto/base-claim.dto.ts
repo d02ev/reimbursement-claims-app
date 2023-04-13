@@ -1,7 +1,7 @@
 import { RequestPhase } from '../enum';
 
 export class BaseClaimDto {
-  date: Date;
+  date: string;
   type: string;
   requestedAmt: number;
   approvedAmt? = 0.0;
