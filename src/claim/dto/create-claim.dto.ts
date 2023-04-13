@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { ClaimType, Currency } from '../enum';
 
 export class CreateClaimDto {
@@ -30,5 +30,10 @@ export class CreateClaimDto {
   currency = Currency.INR;
 
   @IsString()
+  @IsOptional()
   receipt: 'Not Attached!';
+
+  @IsString()
+  @IsNotEmpty()
+  requestedBy: string;
 }

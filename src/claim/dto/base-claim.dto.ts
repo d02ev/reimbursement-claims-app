@@ -12,4 +12,5 @@ export class BaseClaimDto {
   approvedBy? = '';
   declinedBy? = '';
   internalNotes? = '';
+  requestedBy: string;
 }
