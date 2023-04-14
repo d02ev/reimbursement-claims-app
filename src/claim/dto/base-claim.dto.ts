@@ -8,7 +8,6 @@ export class BaseClaimDto {
   currency: string;
   receipt: string;
   requestPhase? = RequestPhase.IN_PROCESS;
-  isApproved? = false;
   approvedBy? = '';
   declinedBy? = '';
   internalNotes? = '';

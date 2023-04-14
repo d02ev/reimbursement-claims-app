@@ -6,7 +6,6 @@ export class EditClaimDto {
   currency?: string;
   receipt?: string;
   requestPhase?: string;
-  isApproved?: boolean;
   approvedBy?: string;
   declinedBy?: string;
   internalNotes?: string;

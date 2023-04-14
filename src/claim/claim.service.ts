@@ -84,7 +84,7 @@ export class ClaimService {
 
   public async getAllApprovedClaims(): Promise<any> {
     const approvedClaims = await this._databaseService.claim.findMany({
-      where: { isApproved: true },
+      where: { requestPhase: RequestPhase.APPROVED },
       include: {
         user: {
           select: {
@@ -107,7 +107,7 @@ export class ClaimService {
   public async getAllDeclinedClaims(): Promise<any> {
     const declinedClaims = await this._databaseService.claim.findMany({
       where: {
-        AND: [{ isApproved: false }, { requestPhase: RequestPhase.DECLINED }],
+        requestPhase: RequestPhase.DECLINED,
       },
       include: {
         user: {
@@ -178,13 +178,14 @@ export class ClaimService {
         HttpStatus.NOT_FOUND,
       );
     }
-    if (claim.isApproved) {
+
+    if (claim.requestPhase === RequestPhase.APPROVED) {
       throw new HttpException(
         'Claim Has Already Been Approved!',
         HttpStatus.BAD_REQUEST,
       );
     }
-    if (!claim.isApproved && claim.requestPhase === RequestPhase.DECLINED) {
+    if (claim.requestPhase === RequestPhase.DECLINED) {
       throw new HttpException(
         'Cannot Approve A Declined Claim!',
         HttpStatus.BAD_REQUEST,
@@ -195,7 +196,6 @@ export class ClaimService {
       approvedAmt: parseFloat(approvingData.approvedAmt),
       requestPhase: RequestPhase.APPROVED,
       internalNotes: approvingData.internalNotes,
-      isApproved: true,
       approvedBy: approvingData.approvedBy,
     };
 
@@ -231,9 +231,15 @@ export class ClaimService {
         HttpStatus.NOT_FOUND,
       );
     }
-    if (!claim.isApproved && claim.requestPhase === RequestPhase.DECLINED) {
+    if (claim.requestPhase === RequestPhase.DECLINED) {
       throw new HttpException(
         'Claim Has Already Been Declined!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (claim.requestPhase === RequestPhase.APPROVED) {
+      throw new HttpException(
+        'Cannot Decline An Approved Claim!',
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -242,7 +248,6 @@ export class ClaimService {
       internalNotes: decliningData.internalNotes,
       approvedAmt: decliningData.approvedAmt,
       requestPhase: RequestPhase.DECLINED,
-      isApproved: false,
       declinedBy: decliningData.declinedBy,
     };
 
