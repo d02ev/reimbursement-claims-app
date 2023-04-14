@@ -162,7 +162,7 @@ export class UserService {
       where: { id: userId },
       data: {
         isAdmin: true,
-        role: 1,
+        role: Role.ADMIN,
       },
     });
 
@@ -202,7 +202,7 @@ export class UserService {
       where: { id: userId },
       data: {
         isAdmin: false,
-        role: 0,
+        role: Role.USER,
       },
     });
 
@@ -224,6 +224,7 @@ export class UserService {
       where: { id: userId },
       select: {
         isApprover: true,
+        role: true,
       },
     });
 
@@ -234,6 +235,13 @@ export class UserService {
     if (user.isApprover) {
       throw new HttpException(
         'User Is Already An Approver!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (user.role !== Role.ADMIN) {
+      throw new HttpException(
+        'Only Admins Can Be Made Approvers!',
         HttpStatus.BAD_REQUEST,
       );
     }
