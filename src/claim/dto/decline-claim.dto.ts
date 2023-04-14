@@ -1,5 +1,4 @@
 import { IsNotEmpty, IsString } from 'class-validator';
-import { RequestPhase } from '../enum';
 
 export class DeclineClaimDto {
   @IsString({
@@ -10,7 +9,5 @@ export class DeclineClaimDto {
   })
   internalNotes: string;
   approvedAmt? = 0.0;
-  requestPhase = RequestPhase.DECLINED;
-  isApproved? = false;
   declinedBy: string;
 }

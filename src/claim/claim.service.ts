@@ -41,7 +41,13 @@ export class ClaimService {
 
   public async getAllClaims(): Promise<any> {
     const claims = await this._databaseService.claim.findMany({
-      include: { user: true },
+      include: {
+        user: {
+          select: {
+            email: true,
+          },
+        },
+      },
     });
 
     if (claims.length === 0) {
@@ -57,7 +63,13 @@ export class ClaimService {
   public async getAllPendingClaims(): Promise<any> {
     const pendingClaims = await this._databaseService.claim.findMany({
       where: { requestPhase: RequestPhase.IN_PROCESS },
-      include: { user: true },
+      include: {
+        user: {
+          select: {
+            email: true,
+          },
+        },
+      },
     });
 
     if (pendingClaims.length === 0) {
@@ -73,7 +85,13 @@ export class ClaimService {
   public async getAllApprovedClaims(): Promise<any> {
     const approvedClaims = await this._databaseService.claim.findMany({
       where: { isApproved: true },
-      include: { user: true },
+      include: {
+        user: {
+          select: {
+            email: true,
+          },
+        },
+      },
     });
 
     if (approvedClaims.length === 0) {
@@ -88,8 +106,16 @@ export class ClaimService {
 
   public async getAllDeclinedClaims(): Promise<any> {
     const declinedClaims = await this._databaseService.claim.findMany({
-      where: { isApproved: false },
-      include: { user: true },
+      where: {
+        AND: [{ isApproved: false }, { requestPhase: RequestPhase.DECLINED }],
+      },
+      include: {
+        user: {
+          select: {
+            email: true,
+          },
+        },
+      },
     });
 
     if (declinedClaims.length === 0) {
@@ -152,10 +178,30 @@ export class ClaimService {
         HttpStatus.NOT_FOUND,
       );
     }
+    if (claim.isApproved) {
+      throw new HttpException(
+        'Claim Has Already Been Approved!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (!claim.isApproved && claim.requestPhase === RequestPhase.DECLINED) {
+      throw new HttpException(
+        'Cannot Approve A Declined Claim!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const _$: EditClaimDto = {
+      approvedAmt: parseFloat(approvingData.approvedAmt),
+      requestPhase: RequestPhase.APPROVED,
+      internalNotes: approvingData.internalNotes,
+      isApproved: true,
+      approvedBy: approvingData.approvedBy,
+    };
 
     const approvedClaim = await this._databaseService.claim.update({
       where: { id: claimId },
-      data: { ...approvingData },
+      data: { ..._$ },
     });
 
     if (!approvedClaim) {
@@ -185,10 +231,24 @@ export class ClaimService {
         HttpStatus.NOT_FOUND,
       );
     }
+    if (!claim.isApproved && claim.requestPhase === RequestPhase.DECLINED) {
+      throw new HttpException(
+        'Claim Has Already Been Declined!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const _$: EditClaimDto = {
+      internalNotes: decliningData.internalNotes,
+      approvedAmt: decliningData.approvedAmt,
+      requestPhase: RequestPhase.DECLINED,
+      isApproved: false,
+      declinedBy: decliningData.declinedBy,
+    };
 
     const declinedClaim = await this._databaseService.claim.update({
       where: { id: claimId },
-      data: { ...decliningData },
+      data: { ..._$ },
     });
 
     if (!declinedClaim) {

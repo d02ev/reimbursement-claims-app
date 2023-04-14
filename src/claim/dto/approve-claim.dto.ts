@@ -1,19 +1,16 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
-import { RequestPhase } from '../enum';
+import { IsNotEmpty, IsNumberString } from 'class-validator';
 
 export class ApproveClaimDto {
-  @IsNumber(
+  @IsNumberString(
+    {},
     {
-      maxDecimalPlaces: 2,
+      message: 'Approved Amount Can Only Contain Numeric Values!',
     },
-    { message: 'Approved Amount Can Only Contain Numeric Values!' },
   )
   @IsNotEmpty({
     message: 'Approved Amount Is Required!',
   })
-  approvedAmt: number;
-  requestPhase = RequestPhase.APPROVED;
+  approvedAmt: string;
   internalNotes?: string;
-  isApproved? = true;
   approvedBy: string;
 }

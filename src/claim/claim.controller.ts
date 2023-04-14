@@ -78,21 +78,21 @@ export class ClaimController {
 
   @UseGuards(AuthenticatedGuard)
   @UseRole(Role.ADMIN)
-  @Get('pending')
+  @Get('pending/all')
   public async getAllPendingClaims(): Promise<any> {
     return await this._claimService.getAllPendingClaims();
   }
 
   @UseGuards(AuthenticatedGuard)
   @UseRole(Role.ADMIN)
-  @Get('approved')
+  @Get('approved/all')
   public async getAllApprovedClaims(): Promise<any> {
     return await this._claimService.getAllApprovedClaims();
   }
 
   @UseGuards(AuthenticatedGuard)
   @UseRole(Role.ADMIN)
-  @Get('declined')
+  @Get('declined/all')
   public async getAllDeclinedClaims(): Promise<any> {
     return await this._claimService.getAllDeclinedClaims();
   }
