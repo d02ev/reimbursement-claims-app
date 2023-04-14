@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthenticatedGuard } from 'src/auth/guards';
 import { GetUser, UseRole } from 'src/auth/decorators';
 import { Role } from './enum';
+import { EditUserDto } from './dto';
 
 @Controller('user')
 export class UserController {
@@ -61,5 +62,15 @@ export class UserController {
   @Patch('remove/approver/:userId')
   public async removeApprover(@GetUser('id') userId: string): Promise<any> {
     return this._userService.removeApprover(userId);
+  }
+
+  @UseGuards(AuthenticatedGuard)
+  @UseRole(Role.USER)
+  @Patch(':userId')
+  public async updateUser(
+    @GetUser('id') userId: string,
+    @Body() updatedData: EditUserDto,
+  ): Promise<any> {
+    return this._userService.updateUser(userId, updatedData);
   }
 }

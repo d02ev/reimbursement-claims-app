@@ -4,4 +4,6 @@ export class EditUserDto {
   PAN?: string;
   bankName?: string;
   bankAccountNumber?: string;
+  role?: number;
+  isAdmin?: boolean;
 }

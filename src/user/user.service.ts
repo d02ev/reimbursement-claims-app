@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { BaseUserDto, CreateUserDto } from './dto';
+import { BaseUserDto, CreateUserDto, EditUserDto } from './dto';
 import { Role } from './enum';
 import * as Bcrypt from 'bcrypt';
 
@@ -302,6 +302,40 @@ export class UserService {
     return {
       status: 200,
       message: "User's Approver Rights Have Been Revoked!",
+    };
+  }
+
+  public async updateUser(userId: string, updatedData: EditUserDto) {
+    const user = await this._databaseService.user.findFirst({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new HttpException(
+        'User Does Not Exist!',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    if (updatedData.email && updatedData.email.includes('admin')) {
+      (updatedData.role = Role.ADMIN), (updatedData.isAdmin = true);
+    }
+
+    const updatedUser = await this._databaseService.user.update({
+      where: { id: userId },
+      data: { ...updatedData },
+    });
+
+    if (!updatedUser) {
+      throw new HttpException(
+        'User Cannot Be Updated Due To An Unknown Error!',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    return {
+      status: 200,
+      message: 'User Details Updated Successfully!',
     };
   }
 }
