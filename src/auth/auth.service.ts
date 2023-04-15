@@ -29,9 +29,8 @@ export class AuthService {
       select: {
         id: true,
         email: true,
-        isAdmin: true,
         isApprover: true,
-        role: true,
+        roles: true,
         passwordHash: true,
       },
     });
