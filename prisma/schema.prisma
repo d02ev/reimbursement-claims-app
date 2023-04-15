@@ -20,8 +20,7 @@ model User {
   PAN               String  @unique
   bankName          String
   bankAccountNumber String  @unique
-  isAdmin           Boolean @default(false)
-  role              Int     @default(0)
+  roles             Int[]
   isApprover        Boolean @default(false)
   passwordHash      String  @unique
 
