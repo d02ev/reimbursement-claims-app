@@ -4,8 +4,7 @@ export class BaseUserDto {
   PAN: string;
   bankName: string;
   bankAccountNumber: string;
-  isAdmin = false;
-  role = 0;
-  isApprover = false;
+  roles = [0];
+  isApprover? = false;
   passwordHash: string;
 }

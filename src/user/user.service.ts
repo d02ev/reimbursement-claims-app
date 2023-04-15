@@ -23,8 +23,14 @@ export class UserService {
 
     const isAdmin =
       creationData.email === 'super.admin@example.com' ? true : false;
-    const role = isAdmin ? Role.ADMIN : Role.USER;
-    const isApprover = isAdmin ? true : false;
+    const roles: number[] = [];
+
+    if (isAdmin) {
+      roles.push(Role.ADMIN);
+    } else {
+      roles.push(Role.USER);
+    }
+
     const passwordHash = await Bcrypt.hash(creationData.password, 10);
     const newUserData: BaseUserDto = {
       fullName: creationData.fullName,
@@ -32,9 +38,7 @@ export class UserService {
       PAN: creationData.PAN,
       bankName: creationData.bankName,
       bankAccountNumber: creationData.bankAccountNumber,
-      isAdmin: isAdmin,
-      isApprover: isApprover,
-      role: role,
+      roles: roles,
       passwordHash: passwordHash,
     };
 
@@ -57,7 +61,11 @@ export class UserService {
 
   public async getAllUsers(): Promise<any> {
     return await this._databaseService.user.findMany({
-      where: { role: 0 },
+      where: {
+        roles: {
+          has: Role.USER,
+        },
+      },
       select: {
         id: true,
         fullName: true,
@@ -85,7 +93,11 @@ export class UserService {
 
   public async getAllAdmins(): Promise<any> {
     return await this._databaseService.user.findMany({
-      where: { isAdmin: true },
+      where: {
+        roles: {
+          has: Role.ADMIN,
+        },
+      },
       select: {
         id: true,
         fullName: true,
@@ -143,7 +155,7 @@ export class UserService {
     const user = await this._databaseService.user.findUnique({
       where: { id: userId },
       select: {
-        isAdmin: true,
+        roles: true,
       },
     });
 
@@ -151,18 +163,30 @@ export class UserService {
       throw new HttpException('User Does Not Exist!', HttpStatus.NOT_FOUND);
     }
 
-    if (user.isAdmin) {
+    if (user.roles.includes(Role.ADMIN)) {
       throw new HttpException(
-        'User Already Has Admin Rights!',
+        'User Already Has Admin Privileges!',
         HttpStatus.BAD_REQUEST,
       );
+    }
+
+    const userRoles = user.roles;
+    if (userRoles.length === 1) {
+      userRoles[0] = Role.ADMIN;
+    } else {
+      for (let i = 0; i < userRoles.length; ++i) {
+        if (userRoles[i] === Role.USER) {
+          userRoles[i] = Role.ADMIN;
+        }
+      }
     }
 
     const admin = await this._databaseService.user.update({
       where: { id: userId },
       data: {
-        isAdmin: true,
-        role: Role.ADMIN,
+        roles: {
+          set: userRoles,
+        },
       },
     });
 
@@ -183,7 +207,7 @@ export class UserService {
     const user = await this._databaseService.user.findUnique({
       where: { id: userId },
       select: {
-        isAdmin: true,
+        roles: true,
       },
     });
 
@@ -191,18 +215,30 @@ export class UserService {
       throw new HttpException('User Does Not Exist!', HttpStatus.NOT_FOUND);
     }
 
-    if (!user.isAdmin) {
+    if (user.roles.includes(Role.USER)) {
       throw new HttpException(
         "User's Admin Rights Have Already Been Revoked!",
         HttpStatus.BAD_REQUEST,
       );
     }
 
+    const userRoles = user.roles;
+    if (userRoles.length === 1) {
+      userRoles[0] = Role.USER;
+    } else {
+      for (let i = 0; i < userRoles.length; ++i) {
+        if (userRoles[i] === Role.ADMIN) {
+          userRoles[i] = Role.USER;
+        }
+      }
+    }
+
     const notAdmin = await this._databaseService.user.update({
       where: { id: userId },
       data: {
-        isAdmin: false,
-        role: Role.USER,
+        roles: {
+          set: userRoles,
+        },
       },
     });
 
@@ -224,7 +260,7 @@ export class UserService {
       where: { id: userId },
       select: {
         isApprover: true,
-        role: true,
+        roles: true,
       },
     });
 
@@ -239,17 +275,13 @@ export class UserService {
       );
     }
 
-    if (user.role !== Role.ADMIN) {
-      throw new HttpException(
-        'Only Admins Can Be Made Approvers!',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     const approver = await this._databaseService.user.update({
       where: { id: userId },
       data: {
         isApprover: true,
+        roles: {
+          push: Role.APPROVER,
+        },
       },
     });
 
@@ -271,6 +303,7 @@ export class UserService {
       where: { id: userId },
       select: {
         isApprover: true,
+        roles: true,
       },
     });
 
@@ -280,15 +313,20 @@ export class UserService {
 
     if (!user.isApprover) {
       throw new HttpException(
-        'User Is Not An Approver Already!',
+        'User Does Not Have Approver Rights!',
         HttpStatus.BAD_REQUEST,
       );
     }
+
+    const userRoles = user.roles.includes(Role.ADMIN) ? Role.ADMIN : Role.USER;
 
     const notApprover = await this._databaseService.user.update({
       where: { id: userId },
       data: {
         isApprover: false,
+        roles: {
+          set: userRoles,
+        },
       },
     });
 
@@ -318,7 +356,10 @@ export class UserService {
     }
 
     if (updatedData.email && updatedData.email.includes('admin')) {
-      (updatedData.role = Role.ADMIN), (updatedData.isAdmin = true);
+      throw new HttpException(
+        'The Email Address Is Restricted And Cannot Be Taken!',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const updatedUser = await this._databaseService.user.update({

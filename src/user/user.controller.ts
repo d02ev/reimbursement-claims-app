@@ -24,14 +24,14 @@ export class UserController {
 
   @UseGuards(AuthenticatedGuard)
   @UseRole(Role.ADMIN)
-  @Get('admins')
+  @Get('admins/all')
   public async getAllAdmins(): Promise<any> {
     return this._userService.getAllAdmins();
   }
 
   @UseGuards(AuthenticatedGuard)
   @UseRole(Role.ADMIN)
-  @Get('approvers')
+  @Get('approvers/all')
   public async getAllApprovers(): Promise<any> {
     return this._userService.getAllApprovers();
   }
@@ -39,28 +39,28 @@ export class UserController {
   @UseGuards(AuthenticatedGuard)
   @UseRole(Role.ADMIN)
   @Patch('grant/admin/:userId')
-  public async makeAdmin(@GetUser('id') userId: string): Promise<any> {
+  public async makeAdmin(@Param('userId') userId: string): Promise<any> {
     return this._userService.makeAdmin(userId);
   }
 
   @UseGuards(AuthenticatedGuard)
   @UseRole(Role.ADMIN)
   @Patch('revoke/admin/:userId')
-  public async revokeAdmin(@GetUser('id') userId: string): Promise<any> {
+  public async revokeAdmin(@Param('userId') userId: string): Promise<any> {
     return this._userService.removeAdmin(userId);
   }
 
   @UseGuards(AuthenticatedGuard)
   @UseRole(Role.ADMIN)
   @Patch('make/approver/:userId')
-  public async makeApprover(@GetUser('id') userId: string): Promise<any> {
+  public async makeApprover(@Param('userId') userId: string): Promise<any> {
     return this._userService.makeApprover(userId);
   }
 
   @UseGuards(AuthenticatedGuard)
   @UseRole(Role.ADMIN)
   @Patch('remove/approver/:userId')
-  public async removeApprover(@GetUser('id') userId: string): Promise<any> {
+  public async removeApprover(@Param('userId') userId: string): Promise<any> {
     return this._userService.removeApprover(userId);
   }
 
