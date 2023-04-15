@@ -49,7 +49,7 @@ export class ClaimController {
     @UploadedFile() receiptImg: Express.Multer.File,
     @GetUser('id') userId: string,
   ): Promise<any> {
-    claimData.receipt = receiptImg.path;
+    claimData.receipt = receiptImg.filename;
     claimData.requestedBy = userId;
     return await this._claimService.generateClaim(claimData);
   }
