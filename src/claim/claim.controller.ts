@@ -29,7 +29,7 @@ export class ClaimController {
   constructor(private readonly _claimService: ClaimService) {}
 
   @UseGuards(AuthenticatedGuard)
-  @UseRole(Role.USER)
+  @UseRole([Role.USER])
   @Post()
   @UseInterceptors(
     FileInterceptor('receipt', {
@@ -55,7 +55,7 @@ export class ClaimController {
   }
 
   @UseGuards(AuthenticatedGuard)
-  @UseRole(Role.ADMIN)
+  @UseRole([Role.ADMIN, Role.APPROVER])
   @Get()
   public async getAllClaims(): Promise<any> {
     return await this._claimService.getAllClaims();
@@ -77,28 +77,28 @@ export class ClaimController {
   }
 
   @UseGuards(AuthenticatedGuard)
-  @UseRole(Role.ADMIN)
+  @UseRole([Role.ADMIN, Role.APPROVER])
   @Get('pending/all')
   public async getAllPendingClaims(): Promise<any> {
     return await this._claimService.getAllPendingClaims();
   }
 
   @UseGuards(AuthenticatedGuard)
-  @UseRole(Role.ADMIN)
+  @UseRole([Role.ADMIN, Role.APPROVER])
   @Get('approved/all')
   public async getAllApprovedClaims(): Promise<any> {
     return await this._claimService.getAllApprovedClaims();
   }
 
   @UseGuards(AuthenticatedGuard)
-  @UseRole(Role.ADMIN)
+  @UseRole([Role.ADMIN, Role.APPROVER])
   @Get('declined/all')
   public async getAllDeclinedClaims(): Promise<any> {
     return await this._claimService.getAllDeclinedClaims();
   }
 
   @UseGuards(AuthenticatedGuard)
-  @UseRole(Role.ADMIN)
+  @UseRole([Role.ADMIN, Role.APPROVER])
   @Patch('approve/:claimId')
   public async approveClaim(
     @Param('claimId') claimId: string,
@@ -110,7 +110,7 @@ export class ClaimController {
   }
 
   @UseGuards(AuthenticatedGuard)
-  @UseRole(Role.ADMIN)
+  @UseRole([Role.ADMIN, Role.APPROVER])
   @Patch('decline/:claimId')
   public async declineClaim(
     @Param('claimdId') claimId: string,
@@ -122,7 +122,6 @@ export class ClaimController {
   }
 
   @UseGuards(AuthenticatedGuard)
-  @UseRole(Role.USER)
   @Patch('edit/:claimId')
   @UseInterceptors(
     FileInterceptor('receipt', {
@@ -155,7 +154,6 @@ export class ClaimController {
   }
 
   @UseGuards(AuthenticatedGuard)
-  @UseRole(Role.USER)
   @Delete('delete/:claimId')
   public async deleteClaim(
     @Param('claimId') claimId: string,
