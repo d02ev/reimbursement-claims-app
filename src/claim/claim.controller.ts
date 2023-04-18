@@ -11,7 +11,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { GetUser, UseRole } from 'src/auth/decorators';
-import { AuthenticatedGuard } from 'src/auth/guards';
+import { JwtGuard } from 'src/auth/guards';
 import { Role } from 'src/user/enum';
 import {
   ApproveClaimDto,
@@ -28,7 +28,7 @@ import { ClaimService } from './claim.service';
 export class ClaimController {
   constructor(private readonly _claimService: ClaimService) {}
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtGuard)
   @UseRole([Role.USER])
   @Post()
   @UseInterceptors(
@@ -54,20 +54,20 @@ export class ClaimController {
     return await this._claimService.generateClaim(claimData);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtGuard)
   @UseRole([Role.ADMIN, Role.APPROVER])
   @Get()
   public async getAllClaims(): Promise<any> {
     return await this._claimService.getAllClaims();
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtGuard)
   @Get('user')
   public async getAllUserClaims(@GetUser('id') userId: string): Promise<any> {
     return await this._claimService.getClaimByUser(userId);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtGuard)
   @Get(':claimId')
   public async getClaimById(
     @Param('claimId') claimId: string,
@@ -76,28 +76,28 @@ export class ClaimController {
     return await this._claimService.getClaimById(claimId, userId);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtGuard)
   @UseRole([Role.ADMIN, Role.APPROVER])
   @Get('pending/all')
   public async getAllPendingClaims(): Promise<any> {
     return await this._claimService.getAllPendingClaims();
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtGuard)
   @UseRole([Role.ADMIN, Role.APPROVER])
   @Get('approved/all')
   public async getAllApprovedClaims(): Promise<any> {
     return await this._claimService.getAllApprovedClaims();
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtGuard)
   @UseRole([Role.ADMIN, Role.APPROVER])
   @Get('declined/all')
   public async getAllDeclinedClaims(): Promise<any> {
     return await this._claimService.getAllDeclinedClaims();
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtGuard)
   @UseRole([Role.ADMIN, Role.APPROVER])
   @Patch('approve/:claimId')
   public async approveClaim(
@@ -109,7 +109,7 @@ export class ClaimController {
     return await this._claimService.approveClaim(claimId, approvingData);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtGuard)
   @UseRole([Role.ADMIN, Role.APPROVER])
   @Patch('decline/:claimId')
   public async declineClaim(
@@ -121,7 +121,7 @@ export class ClaimController {
     return await this._claimService.declineClaim(claimId, decliningData);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtGuard)
   @Patch('edit/:claimId')
   @UseInterceptors(
     FileInterceptor('receipt', {
@@ -153,7 +153,7 @@ export class ClaimController {
     );
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtGuard)
   @Delete('delete/:claimId')
   public async deleteClaim(
     @Param('claimId') claimId: string,
