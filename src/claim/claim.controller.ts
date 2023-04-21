@@ -29,7 +29,7 @@ export class ClaimController {
   constructor(private readonly _claimService: ClaimService) {}
 
   @UseGuards(JwtGuard)
-  @UseRole([Role.USER])
+  @UseRole(Role.USER)
   @Post()
   @UseInterceptors(
     FileInterceptor('receipt', {
@@ -55,14 +55,15 @@ export class ClaimController {
   }
 
   @UseGuards(JwtGuard)
-  @UseRole([Role.ADMIN, Role.APPROVER])
+  @UseRole(Role.ADMIN, Role.APPROVER)
   @Get()
   public async getAllClaims(): Promise<any> {
     return await this._claimService.getAllClaims();
   }
 
   @UseGuards(JwtGuard)
-  @Get('user')
+  @UseRole(Role.USER)
+  @Get('user/all')
   public async getAllUserClaims(@GetUser('id') userId: string): Promise<any> {
     return await this._claimService.getClaimByUser(userId);
   }
@@ -77,28 +78,28 @@ export class ClaimController {
   }
 
   @UseGuards(JwtGuard)
-  @UseRole([Role.ADMIN, Role.APPROVER])
+  @UseRole(Role.ADMIN, Role.APPROVER)
   @Get('pending/all')
   public async getAllPendingClaims(): Promise<any> {
     return await this._claimService.getAllPendingClaims();
   }
 
   @UseGuards(JwtGuard)
-  @UseRole([Role.ADMIN, Role.APPROVER])
+  @UseRole(Role.ADMIN, Role.APPROVER)
   @Get('approved/all')
   public async getAllApprovedClaims(): Promise<any> {
     return await this._claimService.getAllApprovedClaims();
   }
 
   @UseGuards(JwtGuard)
-  @UseRole([Role.ADMIN, Role.APPROVER])
+  @UseRole(Role.ADMIN, Role.APPROVER)
   @Get('declined/all')
   public async getAllDeclinedClaims(): Promise<any> {
     return await this._claimService.getAllDeclinedClaims();
   }
 
   @UseGuards(JwtGuard)
-  @UseRole([Role.ADMIN, Role.APPROVER])
+  @UseRole(Role.APPROVER)
   @Patch('approve/:claimId')
   public async approveClaim(
     @Param('claimId') claimId: string,
@@ -110,7 +111,7 @@ export class ClaimController {
   }
 
   @UseGuards(JwtGuard)
-  @UseRole([Role.ADMIN, Role.APPROVER])
+  @UseRole(Role.APPROVER)
   @Patch('decline/:claimId')
   public async declineClaim(
     @Param('claimdId') claimId: string,
@@ -122,6 +123,7 @@ export class ClaimController {
   }
 
   @UseGuards(JwtGuard)
+  @UseRole(Role.USER)
   @Patch('edit/:claimId')
   @UseInterceptors(
     FileInterceptor('receipt', {
@@ -154,6 +156,7 @@ export class ClaimController {
   }
 
   @UseGuards(JwtGuard)
+  @UseRole(Role.USER)
   @Delete('delete/:claimId')
   public async deleteClaim(
     @Param('claimId') claimId: string,
