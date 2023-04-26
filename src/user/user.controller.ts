@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -18,10 +20,10 @@ export class UserController {
   constructor(private readonly _userService: UserService) {}
 
   @UseGuards(JwtGuard)
-  @UseRole(Role.ADMIN)
+  @UseRole(Role.SUPER_ADMIN, Role.ADMIN)
   @Get()
-  public async getAllUsers(): Promise<any> {
-    return this._userService.getAllUsers();
+  public async getAllUsers(@GetUser('email') adminEmail: string): Promise<any> {
+    return this._userService.getAllUsers(adminEmail);
   }
 
   @UseGuards(JwtGuard)
@@ -31,7 +33,7 @@ export class UserController {
   }
 
   @UseGuards(JwtGuard)
-  @UseRole(Role.ADMIN)
+  @UseRole(Role.SUPER_ADMIN)
   @Get('admins/all')
   public async getAllAdmins(): Promise<any> {
     return this._userService.getAllAdmins();
@@ -45,14 +47,14 @@ export class UserController {
   }
 
   @UseGuards(JwtGuard)
-  @UseRole(Role.ADMIN)
+  @UseRole(Role.SUPER_ADMIN)
   @Patch('grant/admin/:userId')
   public async makeAdmin(@Param('userId') userId: string): Promise<any> {
     return this._userService.makeAdmin(userId);
   }
 
   @UseGuards(JwtGuard)
-  @UseRole(Role.ADMIN)
+  @UseRole(Role.SUPER_ADMIN)
   @Patch('revoke/admin/:userId')
   public async revokeAdmin(@Param('userId') userId: string): Promise<any> {
     return this._userService.removeAdmin(userId);
@@ -80,5 +82,13 @@ export class UserController {
     @Body() updatedData: EditUserDto,
   ): Promise<any> {
     return this._userService.updateUser(userId, updatedData);
+  }
+
+  @UseGuards(JwtGuard)
+  @UseRole(Role.SUPER_ADMIN)
+  @HttpCode(HttpStatus.OK)
+  @Delete(':userId')
+  public async deleteUser(@Param('userId') userId: string): Promise<any> {
+    return this._userService.deleteUser(userId);
   }
 }

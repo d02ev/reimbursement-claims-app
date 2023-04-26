@@ -26,7 +26,7 @@ export class UserService {
     const roles: number[] = [];
 
     if (isAdmin) {
-      roles.push(Role.ADMIN);
+      roles.push(Role.SUPER_ADMIN);
     } else {
       roles.push(Role.USER);
     }
@@ -59,11 +59,11 @@ export class UserService {
     };
   }
 
-  public async getAllUsers(): Promise<any> {
+  public async getAllUsers(loggedInAdminEmail: string): Promise<any> {
     return await this._databaseService.user.findMany({
       where: {
-        roles: {
-          has: Role.USER,
+        email: {
+          not: loggedInAdminEmail,
         },
       },
       select: {
@@ -343,7 +343,10 @@ export class UserService {
     };
   }
 
-  public async updateUser(userId: string, updatedData: EditUserDto) {
+  public async updateUser(
+    userId: string,
+    updatedData: EditUserDto,
+  ): Promise<any> {
     const user = await this._databaseService.user.findFirst({
       where: { id: userId },
     });
@@ -377,6 +380,35 @@ export class UserService {
     return {
       status: 200,
       message: 'User Details Updated Successfully!',
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  public async resetPassword(): Promise<any> {}
+
+  public async deleteUser(userId: string): Promise<any> {
+    const user = await this._databaseService.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new HttpException('User Does Not Exist!', HttpStatus.NOT_FOUND);
+    }
+
+    const deletedUser = await this._databaseService.user.delete({
+      where: { id: userId },
+    });
+
+    if (!deletedUser) {
+      throw new HttpException(
+        'User Cannot Be Deleted Due To An Unknown Error!',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    return {
+      status: 200,
+      message: 'User Deleted Successfully!',
     };
   }
 }
