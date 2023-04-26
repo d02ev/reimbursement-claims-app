@@ -1,0 +1,47 @@
+<div class="container">
+    <div *ngIf="isLoadError" class="alert alert-danger fade show m-3" role="alert">
+        {{ loadErrorResponse }}
+    </div>
+    <div *ngIf="isMakeError" class="alert alert-danger fade show m-3" role="alert">
+        {{ makeErrorResponse }}
+    </div>
+    <div *ngIf="isInfo" class="alert alert-info fade show m-3" role="alert">
+        {{ infoResponse }}
+    </div>
+    <div *ngIf="isMakeSuccess" class="alert alert-success fade show m-3" role="alert">
+        {{ makeSuccessResponse }}
+    </div>
+    <div class="text-center mb-3 mt-2 fs-2">
+        Registered Users
+    </div>
+    <table class="table table-responsive table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">PAN</th>
+                <th scope="col">Bank Name</th>
+                <th scope="col">Bank Account Number</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users">
+                <td class="align-middle text-center"> {{ user.fullName }} </td>
+                <td class="align-middle text-center"> {{ user.email }} </td>
+                <td class="align-middle text-center"> {{ user.PAN }} </td>
+                <td class="align-middle text-center"> {{ user.bankName }} </td>
+                <td class="align-middle text-center"> {{ user.bankAccountNumber }} </td>
+                <td class="align-middle text-center">
+                    <button type="button" class="btn btn-success me-2" (click)="makeUserApprover(user.id)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-person-check-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
+                            <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                        </svg></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

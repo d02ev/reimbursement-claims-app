@@ -1,0 +1,49 @@
+<div class="container">
+    <div *ngIf="isLoadError" class="alert alert-danger fade show m-3" role="alert">
+        {{ loadErrorResponse }}
+    </div>
+    <div *ngIf="isRevokeError" class="alert alert-danger fade show m-3" role="alert">
+        {{ revokeErrorResponse }}
+    </div>
+    <div *ngIf="isInfo" class="alert alert-info fade show m-3" role="alert">
+        {{ infoResponse }}
+    </div>
+    <div *ngIf="isRevokeSuccess" class="alert alert-success fade show m-3" role="alert">
+        {{ revokeSuccessResponse }}
+    </div>
+    <div class="text-center mb-3 mt-2 fs-2">
+        Registered Users
+    </div>
+    <table class="table table-responsive table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">PAN</th>
+                <th scope="col">Bank Name</th>
+                <th scope="col">Bank Account Number</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let admin of admins">
+                <td class="align-middle text-center"> {{ admin.fullName }} </td>
+                <td class="align-middle text-center"> {{ admin.email }} </td>
+                <td class="align-middle text-center"> {{ admin.PAN }} </td>
+                <td class="align-middle text-center"> {{ admin.bankName }} </td>
+                <td class="align-middle text-center"> {{ admin.bankAccountNumber }} </td>
+                <td class="align-middle text-center">
+                    <button type="button" class="btn btn-danger me-2" (click)="removeUserAsAdmin(admin.id)"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-person-down" viewBox="0 0 16 16">
+                            <path
+                                d="M12.5 9a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7Zm.354 5.854 1.5-1.5a.5.5 0 0 0-.708-.708l-.646.647V10.5a.5.5 0 0 0-1 0v2.793l-.646-.647a.5.5 0 0 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+                            <path
+                                d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z" />
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

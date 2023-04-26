@@ -1,0 +1,46 @@
+<div class="container">
+    <div *ngIf="isLoadError" class="alert alert-danger fade show m-3" role="alert">
+        {{ loadErrorResponse }}
+    </div>
+    <div *ngIf="isRemoveError" class="alert alert-danger fade show m-3" role="alert">
+        {{ removeErrorResponse }}
+    </div>
+    <div *ngIf="isInfo" class="alert alert-info fade show m-3" role="alert">
+        {{ infoResponse }}
+    </div>
+    <div *ngIf="isRemoveSuccess" class="alert alert-success fade show m-3" role="alert">
+        {{ removeSuccessResponse }}
+    </div>
+    <div class="text-center mb-3 mt-2 fs-2">
+        Registered Users
+    </div>
+    <table class="table table-responsive table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">PAN</th>
+                <th scope="col">Bank Name</th>
+                <th scope="col">Bank Account Number</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let approver of approvers">
+                <td class="align-middle text-center"> {{ approver.fullName }} </td>
+                <td class="align-middle text-center"> {{ approver.email }} </td>
+                <td class="align-middle text-center"> {{ approver.PAN }} </td>
+                <td class="align-middle text-center"> {{ approver.bankName }} </td>
+                <td class="align-middle text-center"> {{ approver.bankAccountNumber }} </td>
+                <td class="align-middle text-center">
+                    <button type="button" class="btn btn-danger me-2" (click)="removeUserAsApprover(approver.id)"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-person-x-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z" />
+                        </svg></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

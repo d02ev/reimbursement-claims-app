@@ -1,0 +1,56 @@
+<div class="container">
+    <div *ngIf="isLoadError" class="alert alert-danger fade show m-3" role="alert">
+        {{ loadErrorResponse }}
+    </div>
+    <div *ngIf="isGrantError" class="alert alert-danger fade show m-3" role="alert">
+        {{ grantErrorResponse }}
+    </div>
+    <div *ngIf="isInfo" class="alert alert-info fade show m-3" role="alert">
+        {{ infoResponse }}
+    </div>
+    <div *ngIf="isGrantSuccess" class="alert alert-success fade show m-3" role="alert">
+        {{ grantSuccessResponse }}
+    </div>
+    <div class="text-center mb-3 mt-2 fs-2">
+        Registered Users
+    </div>
+    <table class="table table-responsive table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">PAN</th>
+                <th scope="col">Bank Name</th>
+                <th scope="col">Bank Account Number</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users">
+                <td class="align-middle text-center"> {{ user.fullName }} </td>
+                <td class="align-middle text-center"> {{ user.email }} </td>
+                <td class="align-middle text-center"> {{ user.PAN }} </td>
+                <td class="align-middle text-center"> {{ user.bankName }} </td>
+                <td class="align-middle text-center"> {{ user.bankAccountNumber }} </td>
+                <td class="align-middle text-center">
+                    <button type="button" class="btn btn-danger me-2" (click)="deleteUser(user.id)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                            <path
+                                d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-success me-2" (click)="makeUserAdmin(user.id)"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-person-fill-up" viewBox="0 0 16 16">
+                            <path
+                                d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.354-5.854 1.5 1.5a.5.5 0 0 1-.708.708L13 11.707V14.5a.5.5 0 0 1-1 0v-2.793l-.646.647a.5.5 0 0 1-.708-.708l1.5-1.5a.5.5 0 0 1 .708 0ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            <path
+                                d="M2 13c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Z" />
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
