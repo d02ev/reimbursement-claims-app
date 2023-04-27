@@ -59,11 +59,18 @@ export class UserService {
     };
   }
 
-  public async getAllUsers(loggedInAdminEmail: string): Promise<any> {
-    return await this._databaseService.user.findMany({
+  public async getAllUsersForApprovers(
+    loggedInAdminEmail: string,
+  ): Promise<any> {
+    const users = await this._databaseService.user.findMany({
       where: {
         email: {
           not: loggedInAdminEmail,
+        },
+        NOT: {
+          roles: {
+            hasSome: [Role.APPROVER, Role.SUPER_ADMIN],
+          },
         },
       },
       select: {
@@ -75,10 +82,39 @@ export class UserService {
         bankAccountNumber: true,
       },
     });
+
+    return users;
+  }
+
+  public async getAllUsersForAdmins(
+    loggedInSuperAdminEmail: string,
+  ): Promise<any> {
+    const users = await this._databaseService.user.findMany({
+      where: {
+        email: {
+          not: loggedInSuperAdminEmail,
+        },
+        NOT: {
+          roles: {
+            has: Role.ADMIN,
+          },
+        },
+      },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        PAN: true,
+        bankName: true,
+        bankAccountNumber: true,
+      },
+    });
+
+    return users;
   }
 
   public async getAllApprovers(): Promise<any> {
-    return await this._databaseService.user.findMany({
+    const approvers = await this._databaseService.user.findMany({
       where: { isApprover: true },
       select: {
         id: true,
@@ -89,10 +125,12 @@ export class UserService {
         bankAccountNumber: true,
       },
     });
+
+    return approvers;
   }
 
   public async getAllAdmins(): Promise<any> {
-    return await this._databaseService.user.findMany({
+    const admins = await this._databaseService.user.findMany({
       where: {
         roles: {
           has: Role.ADMIN,
@@ -107,6 +145,8 @@ export class UserService {
         bankAccountNumber: true,
       },
     });
+
+    return admins;
   }
 
   public async getUserById(userId: string): Promise<any> {

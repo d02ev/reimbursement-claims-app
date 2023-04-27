@@ -20,58 +20,69 @@ export class UserController {
   constructor(private readonly _userService: UserService) {}
 
   @UseGuards(JwtGuard)
-  @UseRole(Role.SUPER_ADMIN, Role.ADMIN)
-  @Get()
-  public async getAllUsers(@GetUser('email') adminEmail: string): Promise<any> {
-    return this._userService.getAllUsers(adminEmail);
+  @UseRole(Role.SUPER_ADMIN)
+  @Get('for-admins/all')
+  public async getAllUsersForAdmins(
+    @GetUser('email') superAdminEmail: string,
+  ): Promise<any> {
+    return await this._userService.getAllUsersForAdmins(superAdminEmail);
+  }
+
+  @UseGuards(JwtGuard)
+  @UseRole(Role.APPROVER, Role.ADMIN)
+  @Get('for-approvers/all')
+  public async getAllUsersForApprovers(
+    @GetUser('email') adminEmail: string,
+  ): Promise<any> {
+    return await this._userService.getAllUsersForApprovers(adminEmail);
   }
 
   @UseGuards(JwtGuard)
   @Get('me')
   public async getMe(@GetUser('id') userId: string): Promise<any> {
-    return this._userService.getUserById(userId);
+    return await this._userService.getUserById(userId);
   }
 
   @UseGuards(JwtGuard)
   @UseRole(Role.SUPER_ADMIN)
   @Get('admins/all')
   public async getAllAdmins(): Promise<any> {
-    return this._userService.getAllAdmins();
+    return await this._userService.getAllAdmins();
   }
 
   @UseGuards(JwtGuard)
   @UseRole(Role.ADMIN)
   @Get('approvers/all')
   public async getAllApprovers(): Promise<any> {
-    return this._userService.getAllApprovers();
+    return await this._userService.getAllApprovers();
   }
 
   @UseGuards(JwtGuard)
   @UseRole(Role.SUPER_ADMIN)
   @Patch('grant/admin/:userId')
   public async makeAdmin(@Param('userId') userId: string): Promise<any> {
-    return this._userService.makeAdmin(userId);
+    return await this._userService.makeAdmin(userId);
   }
 
   @UseGuards(JwtGuard)
   @UseRole(Role.SUPER_ADMIN)
   @Patch('revoke/admin/:userId')
   public async revokeAdmin(@Param('userId') userId: string): Promise<any> {
-    return this._userService.removeAdmin(userId);
+    return await this._userService.removeAdmin(userId);
   }
 
   @UseGuards(JwtGuard)
   @UseRole(Role.ADMIN)
   @Patch('make/approver/:userId')
   public async makeApprover(@Param('userId') userId: string): Promise<any> {
-    return this._userService.makeApprover(userId);
+    return await this._userService.makeApprover(userId);
   }
 
   @UseGuards(JwtGuard)
   @UseRole(Role.ADMIN)
   @Patch('remove/approver/:userId')
   public async removeApprover(@Param('userId') userId: string): Promise<any> {
-    return this._userService.removeApprover(userId);
+    return await this._userService.removeApprover(userId);
   }
 
   @UseGuards(JwtGuard)
@@ -81,7 +92,7 @@ export class UserController {
     @GetUser('id') userId: string,
     @Body() updatedData: EditUserDto,
   ): Promise<any> {
-    return this._userService.updateUser(userId, updatedData);
+    return await this._userService.updateUser(userId, updatedData);
   }
 
   @UseGuards(JwtGuard)
@@ -89,6 +100,6 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Delete(':userId')
   public async deleteUser(@Param('userId') userId: string): Promise<any> {
-    return this._userService.deleteUser(userId);
+    return await this._userService.deleteUser(userId);
   }
 }
