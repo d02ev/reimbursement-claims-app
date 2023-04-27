@@ -13,7 +13,7 @@ export class ClaimsHomeComponent implements OnInit {
   public pendingClaims: any = [];
   public isInfo = false;
   public isError = false;
-  public infoResponse = '';
+  public infoResponse = 'No Pending Claims Found!';
   public errorResponse = '';
 
   constructor(
@@ -29,7 +29,6 @@ export class ClaimsHomeComponent implements OnInit {
       next: (response: any) => {
         if (response.length === 0) {
           this.isInfo = true;
-          this.infoResponse = response.message;
         }
 
         this.pendingClaims = response;
@@ -44,7 +43,7 @@ export class ClaimsHomeComponent implements OnInit {
       complete: () => {
         setTimeout(() => {
           this.isInfo = false;
-        }, 5000);
+        }, 4500);
       },
     });
   }

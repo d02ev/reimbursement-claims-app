@@ -19,7 +19,7 @@ export class UserClaimsComponent {
   public deleteSuccessResponse = '';
   public deleteErrorResponse = '';
   public loadErrorResponse = '';
-  public infoResponse = '';
+  public infoResponse = 'No Claims Found!';
 
   constructor(
     private readonly _authService: AuthService,
@@ -37,7 +37,6 @@ export class UserClaimsComponent {
       next: (response: any) => {
         if (response.length === 0) {
           this.isInfo = true;
-          this.infoResponse = response.message;
         }
 
         this.userClaims = response;
@@ -52,7 +51,7 @@ export class UserClaimsComponent {
       complete: () => {
         setTimeout(() => {
           this.isInfo = false;
-        }, 5000);
+        }, 4500);
       },
     });
   }

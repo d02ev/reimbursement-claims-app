@@ -27,7 +27,7 @@
                 <td>{{ claim.type }}</td>
                 <td>{{ claim.requestedAmt }} </td>
                 <td> {{ claim.currency }}</td>
-                <td><a href="#">{{ claim.receipt }}</a></td>
+                <td><a href="../../../assets/receipts/{{ claim.receipt }}">{{ claim.receipt }}</a></td>
                 <td>
                     <button type="button" class="btn btn-success me-2" (click)="approveClaim(claim.id)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
