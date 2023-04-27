@@ -76,6 +76,21 @@ const routes: Routes = [
         component: AccessApproversComponent,
         canActivate: [authGuard, adminGuard],
       },
+      {
+        path: 'claims',
+        component: ClaimsHomeComponent,
+        canActivate: [authGuard, approverGuard],
+      },
+      {
+        path: 'claims/approve/:claimId',
+        component: ApproveClaimComponent,
+        canActivate: [authGuard, approverGuard],
+      },
+      {
+        path: 'claims/decline/:claimId',
+        component: DeclineClaimComponent,
+        canActivate: [authGuard, approverGuard],
+      },
     ],
   },
   {
@@ -98,13 +113,11 @@ const routes: Routes = [
         component: UserClaimsComponent,
         canActivate: [authGuard, userGuard],
       },
-    ],
-  },
-  {
-    path: 'approver/dashboard',
-    component: ApproverHomeComponent,
-    canActivate: [authGuard, approverGuard],
-    children: [
+      {
+        path: 'claims',
+        component: ClaimsHomeComponent,
+        canActivate: [authGuard, approverGuard],
+      },
       {
         path: 'claims/approve/:claimId',
         component: ApproveClaimComponent,
@@ -113,11 +126,6 @@ const routes: Routes = [
       {
         path: 'claims/decline/:claimId',
         component: DeclineClaimComponent,
-        canActivate: [authGuard, approverGuard],
-      },
-      {
-        path: '',
-        component: ClaimsHomeComponent,
         canActivate: [authGuard, approverGuard],
       },
     ],
