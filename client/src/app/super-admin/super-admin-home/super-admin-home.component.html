@@ -5,11 +5,9 @@
             <li class="nav-item">
                 <a *ngIf="isRouteChanged()" class="nav-link" routerLink="javascript: void(0)" (click)="goHome()"
                     routerLinkActive="active">Home</a>
-                <a *ngIf="!isRouteChanged()" class="nav-link" routerLink="javascript: void(0)"
-                    (click)="accessAdmins()" routerLinkActive="active">Admins</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" routerLink="javascript: void(0)" (click)="accessAdmins()"
+                <a *ngIf="!isRouteChanged()" class="nav-link" routerLink="javascript: void(0)" (click)="accessAdmins()"
                     routerLinkActive="active">Admins</a>
             </li>
         </ul>
