@@ -26,8 +26,20 @@ export class AdminHomeComponent {
     this._router.navigate(['approvers'], { relativeTo: this._activatedRoute });
   }
 
+  public goToClaimsPage(): void {
+    this._router.navigate(['claims'], { relativeTo: this._activatedRoute });
+  }
+
   public goHome(): void {
     this._router.navigate(['admin/dashboard']);
+  }
+
+  public isAdminApprover(): boolean {
+    if (this._authService.isAdminApprover()) {
+      return true;
+    }
+
+    return false;
   }
 
   public isRouteChanged(): boolean {
