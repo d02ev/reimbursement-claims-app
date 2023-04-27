@@ -50,13 +50,6 @@ export class ClaimService {
       },
     });
 
-    if (claims.length === 0) {
-      return {
-        status: 200,
-        message: 'No Claims Found!',
-      };
-    }
-
     return claims;
   }
 
@@ -72,13 +65,6 @@ export class ClaimService {
       },
     });
 
-    if (pendingClaims.length === 0) {
-      return {
-        status: 200,
-        message: 'No Pending Claims Found!',
-      };
-    }
-
     return pendingClaims;
   }
 
@@ -93,13 +79,6 @@ export class ClaimService {
         },
       },
     });
-
-    if (approvedClaims.length === 0) {
-      return {
-        status: 200,
-        message: 'No Approved Claims Found!',
-      };
-    }
 
     return approvedClaims;
   }
@@ -117,13 +96,6 @@ export class ClaimService {
         },
       },
     });
-
-    if (declinedClaims.length === 0) {
-      return {
-        status: 200,
-        message: 'No Declined Claims Found!',
-      };
-    }
 
     return declinedClaims;
   }
@@ -153,13 +125,6 @@ export class ClaimService {
     const claims = await this._databaseService.claim.findMany({
       where: { requestedBy: userId },
     });
-
-    if (claims.length === 0) {
-      return {
-        status: 200,
-        message: 'No Claims Found For The User!',
-      };
-    }
 
     return claims;
   }
