@@ -13,7 +13,7 @@ export class SuperAdminService {
 
   // public methods
   public getAllUsers(): Observable<any> {
-    return this._httpClient.get(this._baseUrl);
+    return this._httpClient.get(this._baseUrl + '/for-admins/all');
   }
 
   public getAllAdmins(): Observable<any> {

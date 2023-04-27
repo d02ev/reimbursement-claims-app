@@ -13,7 +13,7 @@ export class AdminService {
 
   // public methods
   public getAllUsers(): Observable<any> {
-    return this._httpClient.get(this._baseUrl);
+    return this._httpClient.get(this._baseUrl + '/for-approvers/all');
   }
 
   public getAllApprovers(): Observable<any> {
