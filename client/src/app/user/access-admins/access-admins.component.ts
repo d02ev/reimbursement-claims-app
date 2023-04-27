@@ -28,7 +28,7 @@ export class AccessAdminsComponent implements OnInit {
 
   // info capturing
   public isInfo = false;
-  public infoResponse = '';
+  public infoResponse = 'No Admins Found!';
 
   // public methods
   ngOnInit(): void {
@@ -36,7 +36,6 @@ export class AccessAdminsComponent implements OnInit {
       next: (response: any) => {
         if (response.length === 0) {
           this.isInfo = true;
-          this.infoResponse = response.message;
         }
 
         this.admins = response;
@@ -47,6 +46,11 @@ export class AccessAdminsComponent implements OnInit {
         setTimeout(() => {
           this.isLoadError = false;
         }, 5000);
+      },
+      complete: () => {
+        setTimeout(() => {
+          this.isInfo = false;
+        }, 4500);
       },
     });
   }

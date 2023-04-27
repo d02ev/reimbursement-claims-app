@@ -24,7 +24,7 @@ export class AccessApproversComponent implements OnInit {
 
   // info capturing
   public isInfo = false;
-  public infoResponse = '';
+  public infoResponse = 'No Approvers Found!';
 
   // success capturing
   public isRemoveSuccess = false;
@@ -36,7 +36,6 @@ export class AccessApproversComponent implements OnInit {
       next: (response: any) => {
         if (response.length === 0) {
           this.isInfo = true;
-          this.infoResponse = response.message;
         }
 
         this.approvers = response;
@@ -47,6 +46,11 @@ export class AccessApproversComponent implements OnInit {
         setTimeout(() => {
           this.isLoadError = false;
         }, 5000);
+      },
+      complete: () => {
+        setTimeout(() => {
+          this.isInfo = false;
+        }, 4500);
       },
     });
   }

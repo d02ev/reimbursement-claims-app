@@ -2,9 +2,17 @@
     <div class="container-fluid">
         <a class="navbar-brand">ReimbursementClaimsApp</a>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li *ngIf="isChangedRoute()" class="nav-item">
+                <a class="nav-link" routerLink="javascript: void(0)" (click)="goHome()"
+                    routerLinkActive="active">Home</a>
+            </li>
             <li class="nav-item">
-                <a *ngIf="!isChangedRoute()" class="nav-link" routerLink="javascript: void(0)" (click)="createReimbursement()" routerLinkActive="active">Add New Claim</a>
-                <a *ngIf="isChangedRoute()" class="nav-link" routerLink="javascript: void(0)" (click)="goHome()" routerLinkActive="active">Home</a>
+                <a *ngIf="!isChangedRoute()" class="nav-link" routerLink="javascript: void(0)"
+                    (click)="createReimbursement()" routerLinkActive="active">Add New Claim</a>
+            </li>
+            <li class="nav-item" *ngIf="isUserApprover()">
+                <a *ngIf="!isChangedRoute()" class="nav-link" routerLink="javascript: void(0)"
+                    (click)="goToClaimsPage()" routerLinkActive="active">Pending Claims</a>
             </li>
         </ul>
         <ul class="navbar-nav d-flex justify-content-end">

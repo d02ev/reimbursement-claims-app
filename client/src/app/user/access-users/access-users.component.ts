@@ -30,7 +30,7 @@ export class AccessUsersComponent implements OnInit {
 
   // info capturing
   public isInfo = false;
-  public infoResponse = '';
+  public infoResponse = 'No Registered Users Found!';
 
   // response capturing
   public users: any = [];
@@ -41,7 +41,6 @@ export class AccessUsersComponent implements OnInit {
       next: (response: any) => {
         if (response.length === 0) {
           this.isInfo = true;
-          this.infoResponse = response.message;
         }
 
         this.users = response;
@@ -52,6 +51,11 @@ export class AccessUsersComponent implements OnInit {
         setTimeout(() => {
           this.isLoadError = false;
         }, 5000);
+      },
+      complete: () => {
+        setTimeout(() => {
+          this.isInfo = false;
+        }, 4500);
       },
     });
   }

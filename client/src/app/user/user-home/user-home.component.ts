@@ -32,8 +32,20 @@ export class UserHomeComponent {
     this._router.navigate(['user/dashboard']);
   }
 
+  public goToClaimsPage(): void {
+    this._router.navigate(['claims'], { relativeTo: this._activatedRoute });
+  }
+
+  public isUserApprover(): boolean {
+    if (this._authService.isUserApprover()) {
+      return true;
+    }
+
+    return false;
+  }
+
   public isChangedRoute(): boolean {
-    if (this._router.url.includes('/user/dashboard/claims')) {
+    if (this._router.url.includes('/claims')) {
       return true;
     }
 
