@@ -47,7 +47,9 @@ export class LoginComponent {
           }, 5000);
         },
         complete: () => {
-          if (this._authService.isAdmin()) {
+          if (this._authService.isSuperAdmin()) {
+            this._router.navigate(['super/dashboard']);
+          } else if (this._authService.isAdmin()) {
             this._router.navigate(['admin/dashboard']);
           } else if (
             !(
