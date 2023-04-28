@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService, ErrorService } from 'src/app/services';
-import { RawRegistrationFormValue } from 'src/app/shared/dto';
+import { RawRegistrationFormValue } from 'src/app/shared/dto/user';
 import { matchValidator } from 'src/app/shared/form-validator';
 
 @Component({

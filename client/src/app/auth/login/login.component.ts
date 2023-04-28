@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ErrorService } from 'src/app/services/error.service';
-import { RawLoginFormValue } from 'src/app/shared/dto';
+import { RawLoginFormValue } from 'src/app/shared/dto/user';
 
 @Component({
   selector: 'app-login',
