@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateClaimDto } from '../shared/dto';
+import { CreateClaimDto } from '../shared/dto/claims';
 
 @Injectable({
   providedIn: 'root',

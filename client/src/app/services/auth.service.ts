@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LoginDto, RegisterDto } from '../shared/dto';
+import { LoginDto, RegisterDto } from '../shared/dto/user';
 import { Role } from '../shared/enum';
 
 @Injectable({
