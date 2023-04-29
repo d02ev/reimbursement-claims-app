@@ -13,7 +13,6 @@ import { UserDetailsComponent } from './user/user-details/user-details.component
 import { EditUserDetailsComponent } from './user/edit-user-details/edit-user-details.component';
 import { ResetPasswordComponent } from './user/reset-password/reset-password.component';
 import { AdminHomeComponent } from './admin/admin-home/admin-home.component';
-import { ApproverHomeComponent } from './approver/approver-home/approver-home.component';
 import { ClaimsHomeComponent } from './claims/claims-home/claims-home.component';
 import { EditClaimsComponent } from './claims/edit-claims/edit-claims.component';
 import { ApprovedClaimsComponent } from './claims/approved-claims/approved-claims.component';
@@ -47,7 +46,6 @@ import { AccessUsersAdminComponent } from './user/access-users-admin/access-user
     EditUserDetailsComponent,
     ResetPasswordComponent,
     AdminHomeComponent,
-    ApproverHomeComponent,
     ClaimsHomeComponent,
     EditClaimsComponent,
     ApprovedClaimsComponent,
