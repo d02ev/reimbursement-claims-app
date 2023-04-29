@@ -49,13 +49,13 @@ export class ClaimsHomeComponent implements OnInit {
   }
 
   public approveClaim(claimId: string): void {
-    this._router.navigate([`claims/approve/${claimId}`], {
+    this._router.navigate([`approve/${claimId}`], {
       relativeTo: this._activatedRoute,
     });
   }
 
   public declineClaim(claimId: string): void {
-    this._router.navigate([`claims/decline/${claimId}`], {
+    this._router.navigate([`decline/${claimId}`], {
       relativeTo: this._activatedRoute,
     });
   }

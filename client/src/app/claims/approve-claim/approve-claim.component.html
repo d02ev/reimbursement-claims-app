@@ -1,1 +1,41 @@
-<p>approve-claim works!</p>
+<div class="container">
+    <div *ngIf="isSuccess" class="alert alert-success fade show m-3" role="alert">
+        {{ successResponse }}
+    </div>
+    <div *ngIf="isError" class="alert alert-danger fade show m-3" role="alert">
+        {{ errorResponse }}
+    </div>
+    <div class="card m-3">
+        <div class="card-header">
+            <div class="mb-0 text-center">
+                Approve Reimbursement
+            </div>
+        </div>
+        <div class="card-body">
+            <form [formGroup]="claimApprovalForm" (ngSubmit)="onSubmit()">
+                <div class="form-group mb-2">
+                    <label>
+                        Approved Amount
+                    </label>
+                    <input type="text" formControlName="approvedAmt" class="form-control" />
+                    <div *ngIf="formControls.approvedAmt!.invalid && (formControls.approvedAmt!.dirty || formControls.approvedAmt!.touched)"
+                        class="text-danger">
+                        <div *ngIf="formControls.approvedAmt!.errors!['required']">
+                            Required! Enter an approval amount
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    <label>
+                        Internal Notes
+                    </label>
+                    <input type="text" formControlName="internalNotes" class="form-control" />
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary me-2" [disabled]="claimApprovalForm.invalid">Approve</button>
+                    <button class="btn btn-secondary" (click)="onReset()">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

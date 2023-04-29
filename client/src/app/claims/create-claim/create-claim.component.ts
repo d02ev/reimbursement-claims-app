@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ClaimService } from 'src/app/services/claim.service';
 import { ErrorService } from 'src/app/services/error.service';
-import { RawClaimCreationFormValue } from 'src/app/shared/dto';
+import { RawClaimCreationFormValue } from 'src/app/shared/dto/claims';
 
 @Component({
   selector: 'app-create-claim',

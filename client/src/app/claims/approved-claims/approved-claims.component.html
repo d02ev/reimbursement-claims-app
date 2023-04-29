@@ -1,1 +1,35 @@
-<p>approved-claims works!</p>
+<div class="container-fluid">
+    <div *ngIf="isError" class="alert alert-danger fade show m-3" role="alert">
+        {{ errorResponse }}
+    </div>
+    <div *ngIf="isInfo" class="alert alert-info fade show m-3" role="alert">
+        {{ infoResponse }}
+    </div>
+    <div class="text-center mb-3 mt-2 fs-2">
+        Approved Claims
+    </div>
+    <table class="table table-responsive table-bordered">
+        <thead>
+            <tr>
+                <th scope="col" class="align-middle text-center">Date</th>
+                <th scope="col" class="align-middle text-center">Requested By</th>
+                <th scope="col" class="align-middle text-center">Claim Type</th>
+                <th scope="col" class="align-middle text-center">Requested Amount</th>
+                <th scope="col" class="align-middle text-center">Currency</th>
+                <th scope="col" class="align-middle text-center">Receipt</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let claim of approvedClaims">
+                <td class="align-middle text-center">{{ claim.date }}</td>
+                <td class="align-middle text-center">{{ claim.user.email }}</td>
+                <td class="align-middle text-center">{{ claim.type }}</td>
+                <td class="align-middle text-center">{{ claim.requestedAmt }} </td>
+                <td class="align-middle text-center">{{ claim.currency }} </td>
+                <td *ngIf="claim.receipt !== 'Not Attached'"><a href="../../../assets/receipts/{{ claim.receipt }}" target="_blank">{{
+                        claim.receipt }}</a></td>
+                <td *ngIf="claim.receipt === 'Not Attached'">{{ claim.receipt }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

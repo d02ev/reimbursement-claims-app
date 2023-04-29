@@ -6,29 +6,31 @@
         {{ infoResponse }}
     </div>
     <div class="text-center mb-3 mt-2 fs-2">
-        All Pending Claims
+        Pending Claims
     </div>
     <table class="table table-responsive table-bordered">
         <thead>
             <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Requested By</th>
-                <th scope="col">Claim Type</th>
-                <th scope="col">Requested Amount</th>
-                <th scope="col">Currency</th>
-                <th scope="col">Receipt</th>
-                <th scope="col">Actions</th>
+                <th scope="col" class="align-middle text-center">Date</th>
+                <th scope="col" class="align-middle text-center">Requested By</th>
+                <th scope="col" class="align-middle text-center">Claim Type</th>
+                <th scope="col" class="align-middle text-center">Requested Amount</th>
+                <th scope="col" class="align-middle text-center">Currency</th>
+                <th scope="col" class="align-middle text-center">Receipt</th>
+                <th scope="col" class="align-middle text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let claim of pendingClaims">
-                <td>{{ claim.date }}</td>
-                <td>{{ claim.requestedBy }}</td>
-                <td>{{ claim.type }}</td>
-                <td>{{ claim.requestedAmt }} </td>
-                <td> {{ claim.currency }}</td>
-                <td><a href="../../../assets/receipts/{{ claim.receipt }}">{{ claim.receipt }}</a></td>
-                <td>
+                <td class="align-middle text-center">{{ claim.date }}</td>
+                <td class="align-middle text-center">{{ claim.user.email }}</td>
+                <td class="align-middle text-center">{{ claim.type }}</td>
+                <td class="align-middle text-center">{{ claim.requestedAmt }} </td>
+                <td class="align-middle text-center"> {{ claim.currency }}</td>
+                <td *ngIf="claim.receipt !== 'Not Attached'"><a href="../../../assets/receipts/{{ claim.receipt }}" target="_blank">{{
+                        claim.receipt }}</a></td>
+                <td *ngIf="claim.receipt === 'Not Attached'">{{ claim.receipt }}</td>
+                <td class="align-middle text-center">
                     <button type="button" class="btn btn-success me-2" (click)="approveClaim(claim.id)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-check-square" viewBox="0 0 16 16">

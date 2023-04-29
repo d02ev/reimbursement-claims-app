@@ -1,1 +1,35 @@
-<p>declined-claims works!</p>
+<div class="container-fluid">
+    <div *ngIf="isError" class="alert alert-danger fade show m-3" role="alert">
+        {{ errorResponse }}
+    </div>
+    <div *ngIf="isInfo" class="alert alert-info fade show m-3" role="alert">
+        {{ infoResponse }}
+    </div>
+    <div class="text-center mb-3 mt-2 fs-2">
+        Declined Claims
+    </div>
+    <table class="table table-responsive table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Requested By</th>
+                <th scope="col">Claim Type</th>
+                <th scope="col">Requested Amount</th>
+                <th scope="col">Currency</th>
+                <th scope="col">Receipt</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let claim of declinedClaims">
+                <td>{{ claim.date }}</td>
+                <td>{{ claim.requestedBy }}</td>
+                <td>{{ claim.type }}</td>
+                <td>{{ claim.requestedAmt }} </td>
+                <td>{{ claim.currency }}</td>
+                <td *ngIf="claim.receipt !== 'Not Attached'"><a href="../../../assets/receipts/{{ claim.receipt }}"
+                        target="_blank">{{ claim.receipt }}</a></td>
+                <td *ngIf="claim.receipt === 'Not Attached'">{{ claim.receipt }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

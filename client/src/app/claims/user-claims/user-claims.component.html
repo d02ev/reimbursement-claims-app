@@ -14,27 +14,27 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Claim Type</th>
-                <th scope="col">Requested Amount</th>
-                <th scope="col">Approved Amount</th>
-                <th scope="col">Currency</th>
-                <th scope="col">Request Phase</th>
-                <th scope="col">Receipt Attached</th>
-                <th scope="col">Actions</th>
+                <th scope="col" class="align-middle text-center">Date</th>
+                <th scope="col" class="align-middle text-center">Claim Type</th>
+                <th scope="col" class="align-middle text-center">Requested Amount</th>
+                <th scope="col" class="align-middle text-center">Approved Amount</th>
+                <th scope="col" class="align-middle text-center">Currency</th>
+                <th scope="col" class="align-middle text-center">Request Phase</th>
+                <th scope="col" class="align-middle text-center">Receipt Attached</th>
+                <th scope="col" class="align-middle text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let claim of userClaims">
-                <td>{{ claim.date }}</td>
-                <td>{{ claim.type }}</td>
-                <td>{{ claim.requestedAmt }}</td>
-                <td>{{ claim.approvedAmt }}</td>
-                <td>{{ claim.currency }}</td>
-                <td>{{ claim.requestPhase }}</td>
-                <td><a href="../../../assets/receipts/{{ claim.receipt }}" target="_blank">{{
+                <td class="align-middle text-center">{{ claim.date }}</td>
+                <td class="align-middle text-center">{{ claim.type }}</td>
+                <td class="align-middle text-center">{{ claim.requestedAmt }}</td>
+                <td class="align-middle text-center">{{ claim.approvedAmt }}</td>
+                <td class="align-middle text-center">{{ claim.currency }}</td>
+                <td class="align-middle text-center">{{ claim.requestPhase }}</td>
+                <td class="align-middle text-center"><a href="../../../assets/receipts/{{ claim.receipt }}" target="_blank">{{
                         claim.receipt }}</a></td>
-                <td>
+                <td class="align-middle text-center">
                     <button type="button" class="btn btn-secondary me-2" (click)="editClaim(claim.id)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-pencil-square" viewBox="0 0 16 16">
