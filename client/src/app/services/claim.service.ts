@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateClaimDto } from '../shared/dto/claims';
+import {
+  ApproveClaimDto,
+  CreateClaimDto,
+  DeclineClaimDto,
+} from '../shared/dto/claims';
 
 @Injectable({
   providedIn: 'root',
@@ -32,8 +36,36 @@ export class ClaimService {
     return this._httpClient.get(this._baseUrl + '/pending/all');
   }
 
+  public getAllApprovedClaims(): Observable<any> {
+    return this._httpClient.get(this._baseUrl + '/approved/all');
+  }
+
+  public getAllDeclinedClaims(): Observable<any> {
+    return this._httpClient.get(this._baseUrl + '/declined/all');
+  }
+
   public getAllUserClaims(): Observable<any> {
     return this._httpClient.get(this._baseUrl + '/user/all');
+  }
+
+  public approveClaim(
+    approvalData: ApproveClaimDto,
+    claimId: string,
+  ): Observable<any> {
+    return this._httpClient.patch(
+      `${this._baseUrl}/approve/${claimId}`,
+      approvalData,
+    );
+  }
+
+  public declineClaim(
+    decliningData: DeclineClaimDto,
+    claimId: string,
+  ): Observable<any> {
+    return this._httpClient.patch(
+      `${this._baseUrl}/decline/${claimId}`,
+      decliningData,
+    );
   }
 
   public deleteClaim(claimId: string): Observable<any> {
