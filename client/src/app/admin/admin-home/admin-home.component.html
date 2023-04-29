@@ -10,9 +10,25 @@
                 <a class="nav-link" routerLink="javascript: void(0)" (click)="accessApprovers()"
                     routerLinkActive="active">Approvers</a>
             </li>
-            <li class="nav-item" *ngIf="isAdminApprover()">
-                <a *ngIf="!isRouteChanged()" class="nav-link" routerLink="javascript: void(0)" (click)="goToClaimsPage()"
+        </ul>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="isAdminApprover()">
+            <li class="nav-item" *ngIf="!isRouteChanged()">
+                <a class="nav-link" routerLink="javascript: void(0)" (click)="goToClaimsPage()"
                     routerLinkActive="active">Pending Claims</a>
+            </li>
+            <li class="nav-item" *ngIf="!isRouteChanged()">
+                <a class="nav-link" routerLink="javascript: void(0)" (click)="goToApprovedClaimsPage()"
+                    routerLinkActive="active">Approved Claims</a>
+            </li>
+            <li class="nav-item" *ngIf="!isRouteChanged()">
+                <a class="nav-link" routerLink="javascript: void(0)" (click)="goToDeclinedClaimsPage()"
+                    routerLinkActive="active">Declined Claims</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav d-flex justify-content-end">
+            <li class="nav-item">
+                <a class="nav-link" routerLink="javascript: void(0)" routerLinkActive="active"
+                    (click)="goToUserProfilePage()">{{ userEmail }}</a>
             </li>
         </ul>
         <ul class="navbar-nav d-flex justify-content-end">

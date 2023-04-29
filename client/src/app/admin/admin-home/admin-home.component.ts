@@ -30,6 +30,22 @@ export class AdminHomeComponent {
     this._router.navigate(['claims'], { relativeTo: this._activatedRoute });
   }
 
+  public goToApprovedClaimsPage(): void {
+    this._router.navigate(['claims/approved'], {
+      relativeTo: this._activatedRoute,
+    });
+  }
+
+  public goToDeclinedClaimsPage(): void {
+    this._router.navigate(['claims/declined'], {
+      relativeTo: this._activatedRoute,
+    });
+  }
+
+  public goToUserProfilePage(): void {
+    this._router.navigate(['profile'], { relativeTo: this._activatedRoute });
+  }
+
   public goHome(): void {
     this._router.navigate(['admin/dashboard']);
   }
