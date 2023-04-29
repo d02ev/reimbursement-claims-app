@@ -36,6 +36,22 @@ export class UserHomeComponent {
     this._router.navigate(['claims'], { relativeTo: this._activatedRoute });
   }
 
+  public goToApprovedClaimsPage(): void {
+    this._router.navigate(['claims/approved'], {
+      relativeTo: this._activatedRoute,
+    });
+  }
+
+  public goToDeclinedClaimsPage(): void {
+    this._router.navigate(['claims/declined'], {
+      relativeTo: this._activatedRoute,
+    });
+  }
+
+  public goToUserProfilePage(): void {
+    this._router.navigate(['profile'], { relativeTo: this._activatedRoute });
+  }
+
   public isUserApprover(): boolean {
     if (this._authService.isUserApprover()) {
       return true;
@@ -45,7 +61,10 @@ export class UserHomeComponent {
   }
 
   public isChangedRoute(): boolean {
-    if (this._router.url.includes('/claims')) {
+    if (
+      this._router.url.includes('/claims') ||
+      this._router.url.includes('/profile')
+    ) {
       return true;
     }
 
