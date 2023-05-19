@@ -47,10 +47,10 @@ export class ClaimController {
   public async generate(
     @Body() claimData: CreateClaimDto,
     @UploadedFile() receiptImg: Express.Multer.File,
-    @GetUser('id') userId: string,
+    @GetUser('email') userEmail: string,
   ): Promise<any> {
     claimData.receipt = receiptImg.filename;
-    claimData.requestedBy = userId;
+    claimData.requestedBy = userEmail;
     return await this._claimService.generateClaim(claimData);
   }
 
