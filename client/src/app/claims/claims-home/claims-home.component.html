@@ -27,7 +27,7 @@
                 <td class="align-middle text-center">{{ claim.type }}</td>
                 <td class="align-middle text-center">{{ claim.requestedAmt }} </td>
                 <td class="align-middle text-center"> {{ claim.currency }}</td>
-                <td *ngIf="claim.receipt !== 'Not Attached'"><a href="../../../assets/receipts/{{ claim.receipt }}" target="_blank">{{
+                <td class="align-middle text-center" *ngIf="claim.receipt !== 'Not Attached'"><a href="../../../assets/receipts/{{ claim.receipt }}" target="_blank">{{
                         claim.receipt }}</a></td>
                 <td *ngIf="claim.receipt === 'Not Attached'">{{ claim.receipt }}</td>
                 <td class="align-middle text-center">
