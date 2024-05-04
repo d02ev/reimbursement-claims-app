@@ -1,5 +1,5 @@
 node_modules/
 prisma/
 client/
-build/
+public/
 dist/

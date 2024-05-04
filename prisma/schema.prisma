@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid()) @map("id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  fullName String @db.VarChar() @map("fullname")
+  email String @unique @db.VarChar() @map("email")
+
+  passowordDetail PasswordDetail?
+  bankDetail BankDetail?
+  claims Claim[]
+
+  role Role @relation(fields: [roleId], references: [id])
+  roleId String @map("role_id")
+
+  @@index([email, roleId])
+  @@map("users")
+}
+
+model Role {
+  id String @id @default(uuid()) @map("id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  role String @unique @db.VarChar() @map("role")
+
+  users User[]
+
+  @@index([role])
+  @@map("roles")
+}
+
+model PasswordDetail {
+  id String @id @default(uuid()) @map("id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  passwordHash String @unique @db.VarChar() @map("password_hash")
+  refreshToken String? @unique @db.VarChar() @map("refresh_token")
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @unique @map("user_id")
+
+  @@index([userId])
+  @@map("password_details")
+}
+
+model BankDetail {
+  id String @id @default(uuid()) @map("id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  ifsc String @db.VarChar() @map("ifsc")
+  bankAccNum String @unique @db.VarChar() @map("bank_acc_num")
+  pan String @unique @db.VarChar() @map("pan")
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @unique @map("user_id")
+
+  bankName BankName @relation(fields: [bankNameId], references: [id])
+  bankNameId String @map("bank_name_id")
+
+  @@index([bankAccNum, pan, userId, ifsc, bankNameId])
+  @@map("bank_details")  
+}
+
+model BankName {
+  id String @id @default(uuid()) @map("id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name String @unique @db.VarChar() @map("name")
+
+  bankDetails BankDetail[]
+
+  @@index([name])
+  @@map("bank_names")
+}
+
+model Claim {
+  id String @id @default(uuid()) @map("id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  date DateTime @db.Date @map("date")
+  requestedAmt Decimal @db.Decimal(7, 2) @map("requested_amt")
+  approvedAmt Decimal? @db.Decimal(7, 2) @map("approved_amt")
+  isApproved Boolean? @db.Boolean @map("is_approved")
+  isDeclined Boolean? @db.Boolean @map("is_declined")
+  approvedBy String? @db.VarChar() @map("approved_by")
+  declinedBy String? @db.VarChar() @map("declined_by")
+  notes String? @db.Text @map("notes")
+
+  claimType ClaimType @relation(fields: [claimTypeId], references: [id])
+  claimTypeId String @map("claim_type_id")
+
+  currency Currency @relation(fields: [currencyId], references: [id])
+  currencyId String @map("currency_id")
+
+  requestPhase RequestPhase @relation(fields: [requestPhaseId], references: [id])
+  requestPhaseId String @map("request_phase_id")
+
+  receipt Receipt @relation(fields: [receiptId], references: [id])
+  receiptId String @unique @map("receipt_id")
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  @@index([isApproved, isDeclined, approvedBy, declinedBy, userId, claimTypeId, currencyId, requestPhaseId, receiptId])
+  @@map("claims")
+}
+
+model ClaimType {
+  id String @id @default(uuid()) @map("id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  type String @unique @db.VarChar() @default("Misc") @map("type")
+
+  claims Claim[]
+
+  @@index([type])
+  @@map("claim_types")
+}
+
+model Currency {
+  id String @id @default(uuid()) @map("id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  currency String @unique @db.VarChar() @default("INR") @map("currency")
+
+  claims Claim[]
+
+  @@index([currency])
+  @@map("currencies")
+}
+
+model RequestPhase {
+  id String @id @default(uuid()) @map("id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  phase String @unique @db.VarChar @default("In Process") @map("phase")
+
+  claims Claim[]
+
+  @@index([phase])
+  @@map("request_phases")
+}
+
+model Receipt {
+  id String @id @default(uuid()) @map("id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  imageName String? @db.VarChar() @map("image_name") 
+  receipt String @db.VarChar() @default("Not Attached") @map("receipt")
+
+  claims Claim?
+
+  @@index([imageName])
+  @@map("receipts")
+}
