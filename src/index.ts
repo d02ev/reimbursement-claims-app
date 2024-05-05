@@ -2,12 +2,14 @@ import 'dotenv/config';
 
 import express, { Application, json, urlencoded } from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import { ServerConfig } from './configs';
 
 const app: Application = express();
 
 app.use(cors());
+app.use(cookieParser());
 app.use(json());
 app.use(urlencoded({ extended: true }));
 

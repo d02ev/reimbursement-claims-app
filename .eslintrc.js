@@ -29,10 +29,6 @@ module.exports = {
 		'@typescript-eslint'
 	],
 	'rules': {
-		'indent': [
-			'error',
-			'tab'
-		],
 		'linebreak-style': [
 			'error',
 			'unix'
@@ -45,9 +41,12 @@ module.exports = {
 			'error',
 			'always'
 		],
+		'ident': 'off',
+		'no-mixed-spaces-and-tabs': 'off',
 		'@typescript-eslint/no-explicit-any': 'off',
 		'@typescript-eslint/no-unsafe-member-access': 'off',
 		'@typescript-eslint/no-unsafe-assignment': 'off',
-		'@typescript-eslint/no-unsafe-argument': 'off'
+		'@typescript-eslint/no-unsafe-argument': 'off',
+		'@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
 	}
 };

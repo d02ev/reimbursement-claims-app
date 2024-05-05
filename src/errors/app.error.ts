@@ -6,22 +6,24 @@ export class AppError extends Error {
 	public statusCode: number;
 	public errorCode: string;
 	public logging: boolean;
-	public stack?: any;
+	public stack: string | undefined;
 
 	constructor(
 		message: string,
 		errorCode: string,
 		statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR,
 		logging = true,
-		stack = null,
+		stack: string | undefined,
 	) {
 		super(message);
 		this.message = message;
 		this.errorCode = errorCode;
 		this.statusCode = statusCode;
 		this.logging = logging;
-		this.stack = stack || Error.captureStackTrace(this, this.constructor);
+		this.stack = stack || Error.captureStackTrace(this, this.constructor)!;
 
-		logger.error(this.message, { errorMetadata: { errorCode, stack: this.stack } });
+		logger.error(this.message, {
+			errorMetadata: { errorCode, stack: this.stack },
+		});
 	}
 }
