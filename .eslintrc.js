@@ -28,13 +28,6 @@ module.exports = {
 	'plugins': [
 		'@typescript-eslint'
 	],
-	'ignores': [
-		'node_modules/',
-		'dist/',
-		'prisma/',
-		'public/',
-		'client/'
-	],
 	'rules': {
 		'indent': [
 			'error',
@@ -51,6 +44,10 @@ module.exports = {
 		'semi': [
 			'error',
 			'always'
-		]
+		],
+		'@typescript-eslint/no-explicit-any': 'off',
+		'@typescript-eslint/no-unsafe-member-access': 'off',
+		'@typescript-eslint/no-unsafe-assignment': 'off',
+		'@typescript-eslint/no-unsafe-argument': 'off'
 	}
 };
