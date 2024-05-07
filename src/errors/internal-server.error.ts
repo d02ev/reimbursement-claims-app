@@ -1,8 +1,15 @@
-import { AppErrorCodes } from '../enums';
-import { AppError } from './app.error';
+import { HttpStatusCodes } from '../enums';
 
-export class InternalServerError extends AppError {
-	constructor(message: string) {
-		super(message, AppErrorCodes.NO_APP_ERROR);
+export class InternalServerError extends Error {
+	public message: string;
+	public statusCode: number;
+
+	constructor(
+		message: string,
+		statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR,
+	) {
+		super(message);
+		this.message = message;
+		this.statusCode = statusCode;
 	}
 }

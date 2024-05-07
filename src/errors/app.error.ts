@@ -11,15 +11,15 @@ export class AppError extends Error {
 	constructor(
 		message: string,
 		errorCode: string,
-		statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR,
-		logging = true,
-		stack: string | undefined,
+		statusCode?: number,
+		logging?: boolean,
+		stack?: string | undefined,
 	) {
 		super(message);
 		this.message = message;
 		this.errorCode = errorCode;
-		this.statusCode = statusCode;
-		this.logging = logging;
+		this.statusCode = statusCode || HttpStatusCodes.INTERNAL_SERVER_ERROR;
+		this.logging = logging || true;
 		this.stack = stack || Error.captureStackTrace(this, this.constructor)!;
 
 		logger.error(this.message, {
