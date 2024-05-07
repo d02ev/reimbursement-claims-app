@@ -4,3 +4,4 @@ export * from './login-user-response.dto';
 export * from './register-user-response.dto';
 export * from './validated-user-result.dto';
 export * from './access-token-payload.dto';
+export * from './logout-user-response.dto';

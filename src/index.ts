@@ -8,6 +8,7 @@ import { ServerConfig } from './configs';
 import { errorHandler } from './middlewares';
 import { authRoutes } from './routes';
 import passport from 'passport';
+import { jwtStrategy, localStrategy } from './strategy';
 
 const app: Application = express();
 
@@ -16,6 +17,9 @@ app.use(cookieParser());
 app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(passport.initialize());
+
+localStrategy(passport);
+jwtStrategy(passport);
 
 // routes
 app.use('/api/auth', authRoutes);

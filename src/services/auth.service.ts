@@ -118,7 +118,7 @@ export class AuthService implements IAuthService {
 			);
 
 			const loginUserResponseDto: LoginUserResponseDto = {
-				statusCode: HttpStatusCodes.CREATED,
+				statusCode: HttpStatusCodes.OK,
 				accessToken,
 				refreshToken,
 			};
@@ -177,7 +177,7 @@ export class AuthService implements IAuthService {
 				user.passowordDetail?.passwordHash!,
 			);
 
-			if (passwordMatch) {
+			if (!passwordMatch) {
 				return null;
 			}
 

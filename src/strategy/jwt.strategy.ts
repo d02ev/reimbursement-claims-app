@@ -11,7 +11,7 @@ export const jwtStrategy = (passport: PassportStatic) => {
 		ignoreExpiration: false,
 	};
 
-	passport.use(
+	return passport.use(
 		new Strategy(
 			jwtOptions,
 			(payload: AccessTokenPayloadDto, done: DoneCallback) => {
