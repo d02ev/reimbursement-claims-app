@@ -50,15 +50,11 @@ export class AuthService implements IAuthService {
 				pan,
 			);
 
-			const registerUserResponseDto: RegisterUserResponseDto = {
-				statusCode: HttpStatusCodes.CREATED,
-				message: 'User registered successfully',
-			};
-			return registerUserResponseDto;
+			return new RegisterUserResponseDto();
 		} catch (err: any) {
 			if (err instanceof PrismaClientKnownRequestError) {
 				if (err.code === 'P2002') {
-					throw new BadRequestError(err.message);
+					throw new BadRequestError('User already exists.');
 				}
 
 				throw new AppError(
@@ -117,13 +113,7 @@ export class AuthService implements IAuthService {
 				refreshToken,
 			);
 
-			const loginUserResponseDto: LoginUserResponseDto = {
-				statusCode: HttpStatusCodes.OK,
-				accessToken,
-				refreshToken,
-			};
-
-			return loginUserResponseDto;
+			return new LoginUserResponseDto(accessToken, refreshToken);
 		} catch (err: any) {
 			if (err instanceof NotFoundError) {
 				throw new NotFoundError('User does not exist.');

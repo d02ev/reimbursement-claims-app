@@ -18,16 +18,16 @@ export class RegisterUserRequestDto {
 	@Matches(/^[a-zA-Z\s]+$/, {
 		message: 'Name can only contain alphabets and spaces.',
 	})
-	fullName!: string;
+	fullName: string;
 
 	@IsNotEmpty({ message: 'Email cannot be empty' })
 	@IsEmail({}, { message: 'Email must be a valid email address.' })
-	email!: string;
+	email: string;
 
 	@IsNotEmpty({ message: 'Bank name cannot be empty.' })
 	@IsString({ message: 'Bank name must be a string' })
 	@IsEnum(BankNames)
-	bankName!: string;
+	bankName: string;
 
 	@IsNotEmpty({ message: 'IFSC code cannot be empty.' })
 	@IsAlphanumeric()
@@ -35,7 +35,7 @@ export class RegisterUserRequestDto {
 		message: 'IFSC code must only contain upper case alphabets and numbers.',
 	})
 	@Length(11, 11, { message: 'IFSC code must be 11 characters long.' })
-	ifsc!: string;
+	ifsc: string;
 
 	@IsNotEmpty({ message: 'Bank account number cannot be empty.' })
 	@IsNumberString()
@@ -43,7 +43,7 @@ export class RegisterUserRequestDto {
 	@Matches(/^\d{12}$/, {
 		message: 'Bank account number must only contain numerical digits.',
 	})
-	bankAccNum!: string;
+	bankAccNum: string;
 
 	@IsNotEmpty({ message: 'PAN cannot be empty.' })
 	@IsAlphanumeric()
@@ -51,7 +51,7 @@ export class RegisterUserRequestDto {
 	@Matches(/^[A-Z]{5}\d{4}[A-Z]{1}$/, {
 		message: 'PAN must only contain upper case alphabets and numbers.',
 	})
-	pan!: string;
+	pan: string;
 
 	@IsNotEmpty({ message: 'Password cannot be empty. ' })
 	@IsStrongPassword(
@@ -67,7 +67,7 @@ export class RegisterUserRequestDto {
 				'Password must be minimum 8 characters long with 1 upper and lower case alphabets, 1 numeric digit and 1 special symbol.',
 		},
 	)
-	password!: string;
+	password: string;
 
 	@IsNotEmpty({ message: 'Confirm password cannot be empty.' })
 	@IsStrongPassword({
@@ -78,5 +78,16 @@ export class RegisterUserRequestDto {
 		minUppercase: 1,
 	})
 	@DoPasswordsMatch('password')
-	confirmPassword!: string;
+	confirmPassword: string;
+
+	constructor(obj: RegisterUserRequestDto) {
+		this.fullName = obj.fullName;
+		this.email = obj.email;
+		this.bankName = obj.bankName;
+		this.ifsc = obj.ifsc;
+		this.bankAccNum = obj.bankAccNum;
+		this.pan = obj.pan;
+		this.password = obj.password;
+		this.confirmPassword = obj.confirmPassword;
+	}
 }

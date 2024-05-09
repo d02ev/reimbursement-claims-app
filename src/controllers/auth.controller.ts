@@ -24,15 +24,8 @@ export class AuthController {
 
 	register = async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const registerUserRequestDto = new RegisterUserRequestDto();
-			registerUserRequestDto.fullName = req.body?.fullName;
-			registerUserRequestDto.email = req.body?.email;
-			registerUserRequestDto.bankName = req.body?.bankName;
-			registerUserRequestDto.ifsc = req.body?.ifsc;
-			registerUserRequestDto.bankAccNum = req.body?.bankAccNum;
-			registerUserRequestDto.pan = req.body?.pan;
-			registerUserRequestDto.password = req.body?.password;
-			registerUserRequestDto.confirmPassword = req.body?.confirmPassword;
+			const requestBody: RegisterUserRequestDto = { ...req.body };
+			const registerUserRequestDto = new RegisterUserRequestDto(requestBody);
 
 			// check validations
 			const validationErrors = await validate(registerUserRequestDto);
@@ -52,9 +45,8 @@ export class AuthController {
 
 	login = async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const loginUserRequestDto = new LoginUserRequestDto();
-			loginUserRequestDto.email = req.body?.email;
-			loginUserRequestDto.password = req.body?.password;
+			const requestBody: LoginUserRequestDto = { ...req.body };
+			const loginUserRequestDto = new LoginUserRequestDto(requestBody);
 
 			// check validation
 			const validationErrors = await validate(loginUserRequestDto);
