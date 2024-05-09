@@ -1,7 +1,4 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { logger } from './logger.util';
-import { AppError } from '../errors';
-import { AppErrorCodes } from '../enums';
 
 export class SupabaseUtil {
 	private readonly _supabaseClient: SupabaseClient;
@@ -19,47 +16,57 @@ export class SupabaseUtil {
 		imgName: string,
 		imgBuffer: Buffer,
 		imgMimeType: string,
-	): Promise<boolean> {
-		const { error } = await this._supabaseClient.storage
+	): Promise<
+		| {
+				data: {
+					path: string;
+				};
+				error: null;
+		  }
+		| {
+				data: null;
+				error: any;
+		  }
+	> {
+		return await this._supabaseClient.storage
 			.from(this._supabaseBucketName)
 			.upload(imgName, imgBuffer, { contentType: imgMimeType });
-
-		if (error) {
-			logger.error(error.message, error.stack);
-			throw new AppError(error.message, AppErrorCodes.SB_UPLOAD_ERROR);
-		}
-
-		return true;
 	}
 
 	public async updateImage(
 		newImgName: string,
 		newImgBuffer: Buffer,
 		newImgMimeType: string,
-	): Promise<boolean> {
-		const { error } = await this._supabaseClient.storage
+	): Promise<
+		| {
+				data: {
+					path: string;
+				};
+				error: null;
+		  }
+		| {
+				data: null;
+				error: any;
+		  }
+	> {
+		return await this._supabaseClient.storage
 			.from(this._supabaseBucketName)
 			.update(newImgName, newImgBuffer, { contentType: newImgMimeType });
-
-		if (error) {
-			logger.error(error.message, error.stack);
-			throw new AppError(error.message, AppErrorCodes.SB_UPDATE_ERROR);
-		}
-
-		return true;
 	}
 
-	public async deleteImage(imgName: string): Promise<boolean> {
-		const { error } = await this._supabaseClient.storage
+	public async deleteImage(imgName: string): Promise<
+		| {
+				data: any;
+				error: null;
+		  }
+		| {
+				data: null;
+				error: any;
+		  }
+	> {
+		return await this._supabaseClient.storage
 			.from(this._supabaseBucketName)
 			.remove([imgName]);
-
-		if (error) {
-			logger.error(error.message, error.stack);
-			throw new AppError(error.message, AppErrorCodes.SB_DELETE_ERROR);
-		}
-
-		return true;
 	}
 
 	public getImageUrl(imgName: string): string {

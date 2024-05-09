@@ -12,7 +12,7 @@ import {
 	ValidatedUserResultDto,
 	AccessTokenPayloadDto,
 } from '../dtos';
-import { AppErrorCodes, HttpStatusCodes, UserRoles } from '../enums';
+import { AppErrorCodes, UserRoles } from '../enums';
 import { PasswordDetailRepository, UserRepository } from '../repository';
 import { AuthUtil } from '../utils';
 import { AppError, BadRequestError, NotFoundError } from '../errors';
@@ -60,8 +60,6 @@ export class AuthService implements IAuthService {
 				throw new AppError(
 					err.message,
 					AppErrorCodes.KNOWN_ORM_ERROR,
-					HttpStatusCodes.INTERNAL_SERVER_ERROR,
-					true,
 					err.stack,
 				);
 			}
@@ -69,8 +67,6 @@ export class AuthService implements IAuthService {
 				throw new AppError(
 					err.message,
 					AppErrorCodes.UNKNOWN_ORM_ERROR,
-					HttpStatusCodes.INTERNAL_SERVER_ERROR,
-					true,
 					err.stack,
 				);
 			}
@@ -78,8 +74,6 @@ export class AuthService implements IAuthService {
 			throw new AppError(
 				err.message,
 				AppErrorCodes.UNKNOWN_APP_ERROR,
-				HttpStatusCodes.INTERNAL_SERVER_ERROR,
-				true,
 				err.stack,
 			);
 		}
@@ -126,8 +120,6 @@ export class AuthService implements IAuthService {
 				throw new AppError(
 					err.message,
 					AppErrorCodes.KNOWN_ORM_ERROR,
-					HttpStatusCodes.INTERNAL_SERVER_ERROR,
-					true,
 					err.stack,
 				);
 			}
@@ -135,8 +127,6 @@ export class AuthService implements IAuthService {
 				throw new AppError(
 					err.message,
 					AppErrorCodes.UNKNOWN_ORM_ERROR,
-					HttpStatusCodes.INTERNAL_SERVER_ERROR,
-					true,
 					err.stack,
 				);
 			}
@@ -144,8 +134,6 @@ export class AuthService implements IAuthService {
 			throw new AppError(
 				err.message,
 				AppErrorCodes.UNKNOWN_APP_ERROR,
-				HttpStatusCodes.INTERNAL_SERVER_ERROR,
-				true,
 				err.stack,
 			);
 		}
@@ -182,8 +170,6 @@ export class AuthService implements IAuthService {
 				throw new AppError(
 					err.message,
 					AppErrorCodes.KNOWN_ORM_ERROR,
-					HttpStatusCodes.INTERNAL_SERVER_ERROR,
-					true,
 					err.stack,
 				);
 			}
@@ -191,8 +177,6 @@ export class AuthService implements IAuthService {
 				throw new AppError(
 					err.message,
 					AppErrorCodes.UNKNOWN_ORM_ERROR,
-					HttpStatusCodes.INTERNAL_SERVER_ERROR,
-					true,
 					err.stack,
 				);
 			}
@@ -200,8 +184,6 @@ export class AuthService implements IAuthService {
 			throw new AppError(
 				err.message,
 				AppErrorCodes.UNKNOWN_APP_ERROR,
-				HttpStatusCodes.INTERNAL_SERVER_ERROR,
-				true,
 				err.stack,
 			);
 		}
@@ -231,8 +213,6 @@ export class AuthService implements IAuthService {
 				throw new AppError(
 					err.message,
 					AppErrorCodes.KNOWN_ORM_ERROR,
-					HttpStatusCodes.INTERNAL_SERVER_ERROR,
-					true,
 					err.stack,
 				);
 			}
@@ -240,8 +220,6 @@ export class AuthService implements IAuthService {
 				throw new AppError(
 					err.message,
 					AppErrorCodes.UNKNOWN_ORM_ERROR,
-					HttpStatusCodes.INTERNAL_SERVER_ERROR,
-					true,
 					err.stack,
 				);
 			}
@@ -249,8 +227,6 @@ export class AuthService implements IAuthService {
 			throw new AppError(
 				err.message,
 				AppErrorCodes.UNKNOWN_APP_ERROR,
-				HttpStatusCodes.INTERNAL_SERVER_ERROR,
-				true,
 				err.stack,
 			);
 		}

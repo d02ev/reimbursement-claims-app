@@ -90,7 +90,7 @@ export class ClaimRepository implements IClaimRepository {
 		| undefined
 		| null
 	> {
-		return await this._dbConfig.claim.findUnique({
+		return await this._dbConfig.claim.findUniqueOrThrow({
 			where: { id: claimId },
 			include: {
 				claimType: true,
