@@ -9,7 +9,7 @@ export class ApproveClaimRequestDto {
 	approvedAmt: number;
 
 	approver: string;
-	claimId: string;
+	claimId?: string;
 
 	constructor(obj: ApproveClaimRequestDto) {
 		this.approvedAmt = obj.approvedAmt;

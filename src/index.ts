@@ -3,12 +3,13 @@ import 'dotenv/config';
 import express, { Application, json, urlencoded } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import passport from 'passport';
 
 import { ServerConfig } from './configs';
 import { errorHandler } from './middlewares';
 import { authRoutes } from './routes';
-import passport from 'passport';
 import { jwtStrategy, localStrategy } from './strategy';
+import { claimRoutes } from './routes/claim.routes';
 
 const app: Application = express();
 
@@ -23,6 +24,7 @@ jwtStrategy(passport);
 
 // routes
 app.use('/api/auth', authRoutes);
+app.use('/api/claim', claimRoutes);
 
 app.use(errorHandler);
 

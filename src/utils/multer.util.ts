@@ -10,7 +10,7 @@ export const upload = multer({
 		file: Express.Multer.File,
 		cb: FileFilterCallback,
 	) => {
-		const allowedMimetypes = ['img/jpg', 'img/jpeg', 'img/png'];
+		const allowedMimetypes = ['image/jpg', 'image/jpeg', 'image/png'];
 
 		if (!allowedMimetypes.includes(file.mimetype)) {
 			cb(

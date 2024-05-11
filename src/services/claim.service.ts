@@ -110,7 +110,7 @@ export class ClaimService implements IClaimService {
 	): Promise<FetchClaimResponseDto | FetchClaimResponseDto[] | undefined> {
 		try {
 			const { claimId, userId } = fetchClaimRequestDto;
-			const claim = await this._claimRepository.fetchById(claimId);
+			const claim = await this._claimRepository.fetchById(claimId!);
 
 			if (claim!.userId !== userId)
 				throw new ForbiddenError('You are not allowed to access the claim.');
@@ -228,22 +228,36 @@ export class ClaimService implements IClaimService {
 	): Promise<ApproveClaimResponseDto | undefined> {
 		try {
 			const { approver, claimId, approvedAmt } = approveClaimRequestDto;
+
+			// check if the claim has already been declined or approved
+			const claim = await this._claimRepository.fetchById(claimId!);
+			const claimRequestPhase = claim?.requestPhase.phase;
+
+			if (
+				claimRequestPhase === 'Approved' ||
+				claimRequestPhase === 'Declined'
+			) {
+				throw new BadRequestError(
+					`Cannot approve an already ${claimRequestPhase.toLowerCase()} claim.`,
+				);
+			}
+
 			const approvedClaim = await this._claimRepository.approve(
 				approver,
-				claimId,
+				claimId!,
 				approvedAmt,
 			);
 
-			if (!approvedClaim) {
-				throw new NotFoundError('Cannot approve a non-existent claim.');
-			}
-
-			return new ApproveClaimResponseDto(approvedClaim.id!);
+			return new ApproveClaimResponseDto(approvedClaim?.id!);
 		} catch (err: any) {
-			if (err instanceof NotFoundError) {
+			if (err instanceof BadRequestError) {
 				throw err;
 			}
 			if (err instanceof PrismaClientKnownRequestError) {
+				if (err.code === 'P2025') {
+					throw new NotFoundError('Cannot approve a non-existent claim.');
+				}
+
 				throw new AppError(
 					err.message,
 					AppErrorCodes.KNOWN_ORM_ERROR,
@@ -271,6 +285,20 @@ export class ClaimService implements IClaimService {
 	): Promise<DeclineClaimResponseDto | undefined> {
 		try {
 			const { claimId, decliner, notes } = declineClaimRequestDto;
+
+			// check if the claim has already been declined or approved
+			const claim = await this._claimRepository.fetchById(claimId!);
+			const claimRequestPhase = claim?.requestPhase.phase;
+
+			if (
+				claimRequestPhase === 'Approved' ||
+				claimRequestPhase === 'Declined'
+			) {
+				throw new BadRequestError(
+					`Cannot decline an already ${claimRequestPhase.toLowerCase()} claim.`,
+				);
+			}
+
 			const declinedClaim = await this._claimRepository.decline(
 				decliner,
 				claimId,
@@ -283,10 +311,13 @@ export class ClaimService implements IClaimService {
 
 			return new DeclineClaimResponseDto(declinedClaim.id!);
 		} catch (err: any) {
-			if (err instanceof NotFoundError) {
+			if (err instanceof BadRequestError) {
 				throw err;
 			}
 			if (err instanceof PrismaClientKnownRequestError) {
+				if (err.code === 'P2025') {
+					throw new NotFoundError('Cannot decline a non-existent claim.');
+				}
 				throw new AppError(
 					err.message,
 					AppErrorCodes.KNOWN_ORM_ERROR,
@@ -326,6 +357,19 @@ export class ClaimService implements IClaimService {
 
 			const claim = await this._claimRepository.fetchById(claimId);
 
+			// check if the claim has already been declined or approved
+			const claimRequestPhase = claim?.requestPhase.phase;
+
+			if (
+				claimRequestPhase === 'Approved' ||
+				claimRequestPhase === 'Declined'
+			) {
+				throw new BadRequestError(
+					`Cannot update an already ${claimRequestPhase.toLowerCase()} claim.`,
+				);
+			}
+			// check if the claim has already been declined or approved
+
 			if (claim!.userId !== userId) {
 				throw new ForbiddenError('You are not allowed to access the claim.');
 			}
@@ -338,8 +382,8 @@ export class ClaimService implements IClaimService {
 				sanitizedDate = new Date(claim!.date);
 			} else {
 				sanitizedDate = new Date(date!);
-				const inputUtcDate = sanitizedDate.getUTCDate();
-				const presentUtcDate = new Date(Date.now()).getUTCDate();
+				const inputUtcDate = sanitizedDate;
+				const presentUtcDate = new Date(Date.now());
 				const isPastDate = inputUtcDate < presentUtcDate;
 				if (isPastDate) {
 					throw new BadRequestError('You cannot choose a past date.');
@@ -511,7 +555,7 @@ export class ClaimService implements IClaimService {
 					};
 
 					// an approved claim request
-					if (claim.isApproved && claim.isDeclined === null) {
+					if (claim.isApproved && claim.isDeclined === false) {
 						response.approvedAmt = Number(claim.approvedAmt).valueOf();
 						response.isApproved = claim.isApproved;
 						response.isDeclined = false;
@@ -520,7 +564,7 @@ export class ClaimService implements IClaimService {
 						response.declinedBy = null;
 					}
 					// a declined claim request
-					else if (claim.isApproved === null && claim.isDeclined) {
+					else if (claim.isApproved === false && claim.isDeclined) {
 						response.approvedAmt = 0;
 						response.isApproved = false;
 						response.isDeclined = true;
@@ -552,7 +596,7 @@ export class ClaimService implements IClaimService {
 			};
 
 			// an approved claim request
-			if (claim.isApproved && claim.isDeclined === null) {
+			if (claim.isApproved && claim.isDeclined === false) {
 				fetchClaimResponseDto.approvedAmt = Number(claim.approvedAmt).valueOf();
 				fetchClaimResponseDto.isApproved = claim.isApproved;
 				fetchClaimResponseDto.isDeclined = false;
@@ -561,7 +605,7 @@ export class ClaimService implements IClaimService {
 				fetchClaimResponseDto.declinedBy = null;
 			}
 			// a declined claim request
-			else if (claim.isApproved === null && claim.isDeclined) {
+			else if (claim.isApproved === false && claim.isDeclined) {
 				fetchClaimResponseDto.approvedAmt = 0;
 				fetchClaimResponseDto.isApproved = false;
 				fetchClaimResponseDto.isDeclined = true;

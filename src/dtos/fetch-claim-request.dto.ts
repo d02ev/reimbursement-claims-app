@@ -1,4 +1,4 @@
 export class FetchClaimRequestDto {
-	userId!: string;
-	claimId!: string;
+	userId?: string | undefined;
+	claimId?: string | undefined;
 }
