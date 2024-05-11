@@ -1,11 +1,11 @@
 import { HttpStatusCodes } from '../enums';
 
 export class ApproveClaimResponseDto {
-	private readonly _statusCode: number;
-	private readonly _message: string;
+	private readonly statusCode: number;
+	private readonly message: string;
 
 	constructor(approvedClaimId: string) {
-		this._statusCode = HttpStatusCodes.OK;
-		this._message = `Claim Id '${approvedClaimId}' approved successfully.`;
+		this.statusCode = HttpStatusCodes.OK;
+		this.message = `Claim Id '${approvedClaimId}' approved successfully.`;
 	}
 }
