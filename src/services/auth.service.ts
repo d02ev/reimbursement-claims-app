@@ -11,6 +11,7 @@ import {
 	LoginUserResponseDto,
 	ValidatedUserResultDto,
 	AccessTokenPayloadDto,
+	UserDetailsDto,
 } from '../dtos';
 import { AppErrorCodes, UserRoles } from '../enums';
 import { PasswordDetailRepository, UserRepository } from '../repository';
@@ -117,6 +118,42 @@ export class AuthService implements IAuthService {
 					throw new BadRequestError(err.message);
 				}
 
+				throw new AppError(
+					err.message,
+					AppErrorCodes.KNOWN_ORM_ERROR,
+					err.stack,
+				);
+			}
+			if (err instanceof PrismaClientUnknownRequestError) {
+				throw new AppError(
+					err.message,
+					AppErrorCodes.UNKNOWN_ORM_ERROR,
+					err.stack,
+				);
+			}
+
+			throw new AppError(
+				err.message,
+				AppErrorCodes.UNKNOWN_APP_ERROR,
+				err.stack,
+			);
+		}
+	}
+
+	async getUserDetails(
+		userId: string,
+	): Promise<UserDetailsDto | null | undefined> {
+		try {
+			const user = await this._userRepository.fetchById(userId);
+			const userDetailsDto: UserDetailsDto = {
+				id: user?.id!,
+				name: user?.fullName!,
+				email: user?.email!,
+				role: user?.role.role!,
+			};
+			return userDetailsDto;
+		} catch (err: any) {
+			if (err instanceof PrismaClientKnownRequestError) {
 				throw new AppError(
 					err.message,
 					AppErrorCodes.KNOWN_ORM_ERROR,

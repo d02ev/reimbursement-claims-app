@@ -12,6 +12,11 @@ authRoutes
 		passport.authenticate('local', { session: false }),
 		authController.login,
 	)
+	.get(
+		'/me',
+		passport.authenticate('jwt', { session: false }),
+		authController.me,
+	)
 	.post(
 		'/logout',
 		passport.authenticate('jwt', { session: false }),

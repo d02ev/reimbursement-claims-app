@@ -4,6 +4,7 @@ import {
 	LoginUserResponseDto,
 	RegisterUserRequestDto,
 	RegisterUserResponseDto,
+	UserDetailsDto,
 	ValidatedUserResultDto,
 } from '../../dtos';
 
@@ -15,6 +16,8 @@ export interface IAuthService {
 	loginUser(
 		loginUserRequestDto: LoginUserRequestDto,
 	): Promise<LoginUserResponseDto>;
+
+	getUserDetails(userId: string): Promise<UserDetailsDto | undefined | null>;
 
 	validateUserLocal(
 		email: string,

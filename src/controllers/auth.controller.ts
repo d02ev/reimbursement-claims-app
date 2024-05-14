@@ -7,6 +7,7 @@ import {
 	LoginUserRequestDto,
 	LogoutUserResponseDto,
 	RegisterUserRequestDto,
+	ValidatedUserResultDto,
 } from '../dtos';
 import { HttpStatusCodes } from '../enums';
 
@@ -70,6 +71,17 @@ export class AuthController {
 					this._cookieOptions,
 				)
 				.json(loginUserResponseDto);
+		} catch (err: any) {
+			return next(err);
+		}
+	};
+
+	me = async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const user = req.user as ValidatedUserResultDto;
+			const userDetailsDto = await this._authService.getUserDetails(user.id);
+
+			return res.status(HttpStatusCodes.OK).json(userDetailsDto);
 		} catch (err: any) {
 			return next(err);
 		}
