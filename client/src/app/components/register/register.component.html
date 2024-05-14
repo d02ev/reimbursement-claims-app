@@ -1,0 +1,224 @@
+<main class="container-fluid mt-5">
+  <div class="row">
+    <div class="col-6 mx-auto">
+      <div [class.show]="userRegistrationRequestStatus['type'] !== 0"
+        [class.alert-danger]="userRegistrationRequestStatus['type'] === -1"
+        [class.alert-success]="userRegistrationRequestStatus['type'] === 1" class="alert alert-dismissible fade"
+        role="alert">
+        {{ userRegistrationRequestStatus.message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+          (click)="resetUserRegistrationRequestStatus()"></button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 mx-auto">
+      <div class="card rounded-1">
+        <div class="card-header">
+          <h3 class="mb-0">Register</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="userRegistrationForm" (ngSubmit)="submitUserRegistrationForm()" class="form" novalidate>
+            <div class="row g-3">
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="nameInput" class="form-label">Name</label>
+                  <input [class.is-valid]="getUserRegistrationFormControlState('fullName')['isValidAndTouched']"
+                    [class.is-invalid]="getUserRegistrationFormControlState('fullName')['isInvalidAndTouched']"
+                    formControlName="fullName" type="text" class="form-control rounded-1" required />
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('fullName')['isTouchedOrDirty'] && getUserRegistrationFormControlError('fullName', 'required')">
+                    Name is required!
+                  </div>
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('fullName')['isTouchedOrDirty'] && getUserRegistrationFormControlError('fullName', 'pattern')">
+                    Name must only contain alphabets and whitespaces!
+                  </div>
+                  <div class="valid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('fullName')['isValidAndTouched']">
+                    Looks good!
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="emailInput" class="form-label">Email</label>
+                  <input [class.is-valid]="getUserRegistrationFormControlState('email')['isValidAndTouched']"
+                    [class.is-invalid]="getUserRegistrationFormControlState('email')['isInvalidAndTouched']"
+                    formControlName="email" type="email" class="form-control rounded-1" required />
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('email')['isTouchedOrDirty'] && getUserRegistrationFormControlError('email', 'required')">
+                    Email is required!
+                  </div>
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('email')['isTouchedOrDirty'] && getUserRegistrationFormControlError('email', 'email')">
+                    Email must be a valid email address! E.g john.doe&#64;example.com
+                  </div>
+                  <div class="valid-feedback" *ngIf="getUserRegistrationFormControlState('email')['isValidAndTouched']">
+                    Looks good!
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row g-3">
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="bankNameInput" class="form-label">Bank Name</label>
+                  <select [class.is-invalid]="getUserRegistrationFormControlState('bankName')['isInvalidAndTouched']"
+                    [class.is-valid]="getUserRegistrationFormControlState('bankName')['isValidAndTouched']"
+                    formControlName="bankName" class="form-select">
+                    <option value="">--- Select a bank ---</option>
+                    <option *ngFor="let name of bankNames | keyvalue" [value]="name.value">
+                      {{ name.value }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('bankName')['isTouchedOrDirty'] && getUserRegistrationFormControlError('bankName', 'required')">
+                    Bank name is required!
+                  </div>
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('bankName')['isTouchedOrDirty'] && getUserRegistrationFormControlError('bankName', 'invalidBankName')">
+                    Choose a valid bank name!
+                  </div>
+                  <div class="valid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('bankName')['isValidAndTouched']">
+                    Looks good!
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="ifscInput" class="form-label">IFSC</label>
+                  <input [class.is-valid]="getUserRegistrationFormControlState('ifsc')['isValidAndTouched']"
+                    [class.is-invalid]="getUserRegistrationFormControlState('ifsc')['isInvalidAndTouched']"
+                    formControlName="ifsc" type="text" class="form-control rounded-1" required />
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('ifsc')['isTouchedOrDirty'] && getUserRegistrationFormControlError('ifsc', 'required')">
+                    IFSC is required!
+                  </div>
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('ifsc')['isTouchedOrDirty'] && getUserRegistrationFormControlError('ifsc', 'exactLength')">
+                    IFSC must be 11 characters long!
+                  </div>
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('ifsc')['isTouchedOrDirty'] && getUserRegistrationFormControlError('ifsc', 'pattern')">
+                    Invalid IFSC! e.g. ABCD0123456
+                  </div>
+                  <div class="valid-feedback" *ngIf="getUserRegistrationFormControlState('ifsc')['isValidAndTouched']">
+                    Looks good!
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row g-3">
+              <div class="col">
+                <div class="from-group mb-3">
+                  <label for="bankAccountNumberInput" class="form-label">Bank Account Number</label>
+                  <input [class.is-invalid]="getUserRegistrationFormControlState('bankAccNum')['isInvalidAndTouched']"
+                    [class.is-valid]="getUserRegistrationFormControlState('bankAccNum')['isValidAndTouched']"
+                    formControlName="bankAccNum" type="text" class="form-control rounded-1" required />
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('bankAccNum')['isTouchedOrDirty'] && getUserRegistrationFormControlError('bankAccNum', 'required')">
+                    Bank account number is required!
+                  </div>
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('bankAccNum')['isTouchedOrDirty'] && getUserRegistrationFormControlError('bankAccNum', 'exactLength')">
+                    Bank account number must be 12 digits long!
+                  </div>
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('bankAccNum')['isTouchedOrDirty'] && getUserRegistrationFormControlError('bankAccNum', 'pattern')">
+                    Bank account number must only contain numeric digits!
+                  </div>
+                  <div class="valid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('bankAccNum')['isValidAndTouched']">
+                    Looks good!
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="panInput" class="form-label">PAN</label>
+                  <input [class.is-valid]="getUserRegistrationFormControlState('pan')['isValidAndTouched']"
+                    [class.is-invalid]="getUserRegistrationFormControlState('pan')['isInvalidAndTouched']"
+                    formControlName="pan" type="text" class="form-control rounded-1" required />
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('pan')['isTouchedOrDirty'] && getUserRegistrationFormControlError('pan', 'required')">
+                    PAN is required!
+                  </div>
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('pan')['isTouchedOrDirty'] && getUserRegistrationFormControlError('pan', 'exactLength')">
+                    PAN must be 10 characters long!
+                  </div>
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('pan')['isTouchedOrDirty'] && getUserRegistrationFormControlError('pan', 'pattern')">
+                    Invalid PAN! e.g. ABCDE1234F
+                  </div>
+                  <div class="valid-feedback" *ngIf="getUserRegistrationFormControlState('pan')['isValidAndTouched']">
+                    Looks good!
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row g-3">
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="passwordInput" class="form-label">Password</label>
+                  <input [class.is-valid]="getUserRegistrationFormControlState('password')['isValidAndTouched']"
+                    [class.is-invalid]="getUserRegistrationFormControlState('password')['isInvalidAndTouched']"
+                    formControlName="password" type="password" class="form-control rounded-1" required />
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('password')['isTouchedOrDirty'] && getUserRegistrationFormControlError('password', 'required')">
+                    Password is required!
+                  </div>
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('password')['isTouchedOrDirty'] && getUserRegistrationFormControlError('password', 'minlength')">
+                    Password must be minimum 8 characters long!
+                  </div>
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('password')['isTouchedOrDirty'] && getUserRegistrationFormControlError('password', 'maxlength')">
+                    Password must be maximum 15 characters long!
+                  </div>
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('password')['isTouchedOrDirty'] && getUserRegistrationFormControlError('password', 'pattern')">
+                    Invalid password! Password must contain 1 special character, 1 number, 1 uppercase alphabet and 1
+                    lowercase alphabet!
+                  </div>
+                  <div class="valid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('password')['isValidAndTouched']">
+                    Looks good!
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group mb-3">
+                  <label for="confirmPasswordInput" class="form-label">Confirm Password</label>
+                  <input [class.is-valid]="getUserRegistrationFormControlState('confirmPassword')['isValidAndTouched']"
+                    [class.is-invalid]="getUserRegistrationFormControlState('confirmPassword')['isInvalidAndTouched']"
+                    formControlName="confirmPassword" type="password" class="form-control rounded-1" required />
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('confirmPassword')['isTouchedOrDirty'] && getUserRegistrationFormControlError('confirmPassword', 'required')">
+                    Confirm Password is required!
+                  </div>
+                  <div class="invalid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('confirmPassword')['isTouchedOrDirty'] && getUserRegistrationFormControlError('confirmPassword', 'passwordsDoNotMatch')">
+                    Passwords do not match!
+                  </div>
+                  <div class="valid-feedback"
+                    *ngIf="getUserRegistrationFormControlState('confirmPassword')['isValidAndTouched']">
+                    Looks good!
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="userRegistrationForm.invalid">Register</button>
+          </form>
+        </div>
+        <div class="card-footer">
+          Already have an account?
+          <a routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
+            href="javascript:void(0)">login</a> instead
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
