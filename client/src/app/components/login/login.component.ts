@@ -10,6 +10,12 @@ import {
 	Validators,
 	AbstractControl,
 } from '@angular/forms';
+import {
+	FetchUserDetailsResponseDto,
+	LoginUserRequestDto,
+	LoginUserResponseDto,
+} from '../../../dtos';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
 	selector: 'app-login',
@@ -24,14 +30,46 @@ export class LoginComponent {
 		message: '',
 	};
 
-	constructor(private readonly _formBuilder: FormBuilder) {}
+	constructor(
+		private readonly _formBuilder: FormBuilder,
+		private readonly _authService: AuthService,
+	) {}
 
 	userLoginForm: FormGroup = this._formBuilder.group({
 		email: new FormControl('', [Validators.required, Validators.email]),
 		password: new FormControl('', [Validators.required]),
 	});
 
-	submitUserLoginForm(): void {}
+	submitUserLoginForm(event: SubmitEvent): void {
+		event.preventDefault();
+		const loginUserRequestDto: LoginUserRequestDto = {
+			...this.userLoginForm.value,
+		};
+
+		this._authService.login(loginUserRequestDto).subscribe({
+			next: (response: LoginUserResponseDto) => {
+				window.localStorage.setItem('accessToken', response.accessToken);
+				window.localStorage.setItem('refreshToken', response.refreshToken);
+
+				this._authService.fetchMe().subscribe({
+					next: (response: FetchUserDetailsResponseDto) => {
+						window.localStorage.setItem('user', JSON.stringify(response));
+
+						this.setUserLoginRequestStatus(RequestStatusType.SUCCESS, 'User logged in successfully.');
+					},
+					error: (error: Error) => {
+						this.setUserLoginRequestStatus(
+							RequestStatusType.ERROR,
+							error.message,
+						);
+					},
+					complete: () => {},
+				});
+			},
+			error: (error: Error) => {},
+			complete: () => {},
+		});
+	}
 
 	getUserLoginFormControl(controlName: string): AbstractControl | null {
 		return this.userLoginForm.get(controlName);

@@ -11,6 +11,8 @@ import {
 import { BankName, RequestStatusType } from '../../../enums';
 import { exactLength, passwordMatchValidator } from '../../../validators';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { RegisterUserRequestDto, RegisterUserResponseDto } from '../../../dtos';
 
 @Component({
 	selector: 'app-register',
@@ -37,6 +39,7 @@ export class RegisterComponent {
 	constructor(
 		private readonly _formBuilder: FormBuilder,
 		private readonly _router: Router,
+		private readonly _authService: AuthService,
 	) {}
 
 	userRegistrationForm: FormGroup = this._formBuilder.group({
@@ -73,7 +76,33 @@ export class RegisterComponent {
 		]),
 	});
 
-	submitUserRegistrationForm(): void {}
+	submitUserRegistrationForm(event: SubmitEvent): void {
+		event.preventDefault();
+		const registerUserRequestDto: RegisterUserRequestDto = {
+			...this.userRegistrationForm.value,
+		};
+
+		this._authService.register(registerUserRequestDto).subscribe({
+			next: (response: RegisterUserResponseDto) => {
+				this.setUserRegistrationRequestStatus(
+					RequestStatusType.SUCCESS,
+					response.message,
+				);
+			},
+			error: (error: Error) => {
+				this.setUserRegistrationRequestStatus(
+					RequestStatusType.ERROR,
+					error.message,
+				);
+			},
+			complete: () => {
+				setTimeout(() => {
+					this.resetUserRegistrationRequestStatus();
+					this.routeToLoginPage();
+				}, 3000);
+			},
+		});
+	}
 
 	getUserRegistrationFormControl(controlName: string): AbstractControl | null {
 		return this.userRegistrationForm.get(controlName);
@@ -120,5 +149,9 @@ export class RegisterComponent {
 			type: RequestStatusType.NONE,
 			message: '',
 		};
+	}
+
+	routeToLoginPage(): void {
+		this._router.navigate(['/login']);
 	}
 }

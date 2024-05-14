@@ -18,7 +18,7 @@
           <h3 class="mb-0">Register</h3>
         </div>
         <div class="card-body">
-          <form [formGroup]="userRegistrationForm" (ngSubmit)="submitUserRegistrationForm()" class="form" novalidate>
+          <form [formGroup]="userRegistrationForm" (ngSubmit)="submitUserRegistrationForm($event)" class="form" novalidate>
             <div class="row g-3">
               <div class="col">
                 <div class="form-group mb-3">
