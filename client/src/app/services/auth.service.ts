@@ -59,4 +59,13 @@ export class AuthService {
 	getAccessToken(): string | undefined | null {
 		return window.localStorage.getItem('accessToken');
 	}
+
+	isLoggedIn(): boolean {
+		return !!window.localStorage.getItem('user');
+	}
+
+	hasRole(role: 'User' | 'Admin'): boolean {
+		const user = window.localStorage.getItem('user');
+		return user && JSON.parse(user)['role'] === role ? true : false;
+	}
 }

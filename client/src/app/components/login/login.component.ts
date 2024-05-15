@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { RequestStatusType } from '../../../enums';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import {
 	ReactiveFormsModule,
 	FormBuilder,
@@ -15,7 +14,8 @@ import {
 	LoginUserRequestDto,
 	LoginUserResponseDto,
 } from '../../../dtos';
-import { AuthService } from '../../services/auth.service';
+import { RequestStatusType } from '../../../enums';
+import { AuthService } from '../../services';
 
 @Component({
 	selector: 'app-login',
@@ -32,6 +32,7 @@ export class LoginComponent {
 
 	constructor(
 		private readonly _formBuilder: FormBuilder,
+		private readonly _router: Router,
 		private readonly _authService: AuthService,
 	) {}
 
@@ -55,7 +56,10 @@ export class LoginComponent {
 					next: (response: FetchUserDetailsResponseDto) => {
 						window.localStorage.setItem('user', JSON.stringify(response));
 
-						this.setUserLoginRequestStatus(RequestStatusType.SUCCESS, 'User logged in successfully.');
+						this.setUserLoginRequestStatus(
+							RequestStatusType.SUCCESS,
+							'User logged in successfully.',
+						);
 					},
 					error: (error: Error) => {
 						this.setUserLoginRequestStatus(
@@ -63,11 +67,16 @@ export class LoginComponent {
 							error.message,
 						);
 					},
-					complete: () => {},
+					complete: () => {
+						if (this._authService.hasRole('Admin')) {
+							this._router.navigate(['/admin/home']);
+						} else if (this._authService.hasRole('User')) {
+							this._router.navigate(['user/home']);
+						}
+					},
 				});
 			},
 			error: (error: Error) => {},
-			complete: () => {},
 		});
 	}
 

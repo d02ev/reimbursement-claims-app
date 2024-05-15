@@ -8,10 +8,10 @@ import {
 	Validators,
 	AbstractControl,
 } from '@angular/forms';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { BankName, RequestStatusType } from '../../../enums';
 import { exactLength, passwordMatchValidator } from '../../../validators';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services';
 import { RegisterUserRequestDto, RegisterUserResponseDto } from '../../../dtos';
 
 @Component({
