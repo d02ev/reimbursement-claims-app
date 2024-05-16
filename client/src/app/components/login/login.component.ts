@@ -16,6 +16,7 @@ import {
 } from '../../../dtos';
 import { RequestStatusType } from '../../../enums';
 import { AuthService } from '../../services';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
 	selector: 'app-login',
@@ -61,12 +62,6 @@ export class LoginComponent {
 							'User logged in successfully.',
 						);
 					},
-					error: (error: Error) => {
-						this.setUserLoginRequestStatus(
-							RequestStatusType.ERROR,
-							error.message,
-						);
-					},
 					complete: () => {
 						if (this._authService.hasRole('Admin')) {
 							this._router.navigate(['/admin/home']);
@@ -76,7 +71,16 @@ export class LoginComponent {
 					},
 				});
 			},
-			error: (error: Error) => {},
+			error: (error: HttpErrorResponse) => {
+				if (error.status === 401) {
+					this.setUserLoginRequestStatus(
+						RequestStatusType.ERROR,
+						'Invalid credentials',
+					);
+				}
+
+				this.setUserLoginRequestStatus(RequestStatusType.ERROR, error.message);
+			},
 		});
 	}
 

@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a routerLink="/admin/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+      href="javascript:void(0)" class="navbar-brand">ReimbursementClaimsApp</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse flex-grow-1 text-right" id="navbarNavDropdown">
+      <ul class="navbar-nav ms-auto flex-nowrap">
+        <li class="nav-item">
+          <a class="nav-link active">Hey, {{ loggedInUserName }}</a>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="btn btn-danger" (click)="logout()">Logout</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<router-outlet></router-outlet>

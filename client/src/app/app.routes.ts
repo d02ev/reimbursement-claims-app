@@ -2,10 +2,9 @@ import { Routes } from '@angular/router';
 import { MainHomeComponent } from './components/home/main-home/main-home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { UserHomeComponent } from './components/home/user-home/user-home.component';
 import { adminGuard, authGuard, userGuard } from './guards';
 import { DisplayClaimComponent } from './components/claim/display-claim/display-claim.component';
-import { AdminHomeComponent } from './components/home/admin-home/admin-home.component';
+import { LoggedInUserHomeComponent } from './components/logged-in-user-home/logged-in-user-home.component';
 
 export const routes: Routes = [
 	{
@@ -24,8 +23,9 @@ export const routes: Routes = [
 	},
 	{
 		path: 'user/home',
-		canActivate: [authGuard, userGuard],
-		component: UserHomeComponent,
+		canActivate: [authGuard],
+		component: LoggedInUserHomeComponent,
+		canActivateChild: [userGuard],
 		children: [
 			{
 				path: '',
@@ -37,8 +37,9 @@ export const routes: Routes = [
 	},
   {
     path: 'admin/home',
-    canActivate: [authGuard, adminGuard],
-    component: AdminHomeComponent,
+    canActivate: [authGuard],
+    component: LoggedInUserHomeComponent,
+		canActivateChild: [adminGuard],
     children: [
       {
         path: '',

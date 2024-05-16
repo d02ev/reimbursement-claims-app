@@ -520,6 +520,7 @@ export class ClaimService implements IClaimService {
 						currency: true;
 						requestPhase: true;
 						receipt: true;
+						user: true;
 					};
 			  }>[]
 			| Prisma.ClaimGetPayload<{
@@ -528,6 +529,7 @@ export class ClaimService implements IClaimService {
 						currency: true;
 						requestPhase: true;
 						receipt: true;
+						user: true;
 					};
 			  }>,
 	): FetchClaimResponseDto[] | FetchClaimResponseDto {
@@ -542,12 +544,15 @@ export class ClaimService implements IClaimService {
 							currency: true;
 							requestPhase: true;
 							receipt: true;
+							user: true;
 						};
 					}>,
 				) => {
 					const response: FetchClaimResponseDto = {
+						id: claim.id,
 						date: new Date(claim.date).toDateString(),
 						type: claim.claimType.type,
+						requestedBy: claim.user.email,
 						requestedAmt: Number(claim.requestedAmt).valueOf(),
 						currency: claim.currency.currency,
 						requestPhase: claim.requestPhase.phase,
@@ -587,7 +592,9 @@ export class ClaimService implements IClaimService {
 			);
 		} else {
 			fetchClaimResponseDto = {
+				id: claim.id,
 				date: new Date(claim.date).toDateString(),
+				requestedBy: claim.user.email,
 				type: claim.claimType.type,
 				requestedAmt: Number(claim.requestedAmt).valueOf(),
 				currency: claim.currency.currency,

@@ -18,6 +18,7 @@ export interface IClaimRepository {
 					currency: true;
 					requestPhase: true;
 					receipt: true;
+					user: true;
 				};
 		  }>[]
 		| undefined
@@ -31,6 +32,7 @@ export interface IClaimRepository {
 					currency: true;
 					requestPhase: true;
 					receipt: true;
+					user: true;
 				};
 		  }>
 		| undefined
@@ -44,6 +46,7 @@ export interface IClaimRepository {
 					currency: true;
 					requestPhase: true;
 					receipt: true;
+					user: true;
 				};
 		  }>[]
 		| undefined

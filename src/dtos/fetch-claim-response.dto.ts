@@ -1,6 +1,8 @@
 export class FetchClaimResponseDto {
+	id?: string | null;
 	date?: string | null;
 	type?: string | null;
+	requestedBy?: string | null;
 	requestedAmt?: number | null;
 	approvedAmt?: number | null;
 	currency?: string | null;

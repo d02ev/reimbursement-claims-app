@@ -63,6 +63,7 @@ export class ClaimRepository implements IClaimRepository {
 					currency: true;
 					requestPhase: true;
 					receipt: true;
+					user: true;
 				};
 		  }>[]
 		| undefined
@@ -74,6 +75,7 @@ export class ClaimRepository implements IClaimRepository {
 				currency: true,
 				requestPhase: true,
 				receipt: true,
+				user: true,
 			},
 		});
 	}
@@ -85,6 +87,7 @@ export class ClaimRepository implements IClaimRepository {
 					currency: true;
 					requestPhase: true;
 					receipt: true;
+					user: true;
 				};
 		  }>
 		| undefined
@@ -97,6 +100,7 @@ export class ClaimRepository implements IClaimRepository {
 				currency: true,
 				requestPhase: true,
 				receipt: true,
+				user: true,
 			},
 		});
 	}
@@ -108,6 +112,7 @@ export class ClaimRepository implements IClaimRepository {
 					currency: true;
 					requestPhase: true;
 					receipt: true;
+					user: true;
 				};
 		  }>[]
 		| undefined
@@ -120,6 +125,7 @@ export class ClaimRepository implements IClaimRepository {
 				currency: true,
 				requestPhase: true,
 				receipt: true,
+				user: true,
 			},
 		});
 	}

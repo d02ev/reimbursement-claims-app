@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
-import { CanActivateFn } from '@angular/router';
+import { CanActivateChildFn } from '@angular/router';
 import { AuthService } from '../services';
 
-export const adminGuard: CanActivateFn = (route, state) => {
+export const adminGuard: CanActivateChildFn = (route, state) => {
 	return inject(AuthService).hasRole('Admin');
 };
