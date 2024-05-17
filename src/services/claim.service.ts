@@ -556,6 +556,7 @@ export class ClaimService implements IClaimService {
 						requestedAmt: Number(claim.requestedAmt).valueOf(),
 						currency: claim.currency.currency,
 						requestPhase: claim.requestPhase.phase,
+						receiptName: claim.receipt.imageName,
 						receipt: claim.receipt.receipt,
 					};
 
@@ -599,6 +600,7 @@ export class ClaimService implements IClaimService {
 				requestedAmt: Number(claim.requestedAmt).valueOf(),
 				currency: claim.currency.currency,
 				requestPhase: claim.requestPhase.phase,
+				receiptName: claim.receipt.imageName,
 				receipt: claim.receipt.receipt,
 			};
 

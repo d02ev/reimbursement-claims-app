@@ -12,5 +12,6 @@ export class FetchClaimResponseDto {
 	notes?: string | null;
 	approvedBy?: string | null;
 	declinedBy?: string | null;
+	receiptName?: string | null;
 	receipt?: string | null;
 }
