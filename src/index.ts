@@ -15,10 +15,8 @@ const app: Application = express();
 
 app.use(
 	cors({
-		origin:
-			process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
-				? 'http://localhost:5000/api'
-				: 'https://reimbursement-claims-app-backend.onrender.com/api',
+		origin: process.env.CORS_ORIGIN,
+		credentials: false,
 	}),
 );
 app.use(cookieParser());
