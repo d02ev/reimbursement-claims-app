@@ -12,6 +12,7 @@ import {
 	ValidatedUserResultDto,
 	AccessTokenPayloadDto,
 	UserDetailsDto,
+	RefreshAccessTokenResponseDto,
 } from '../dtos';
 import { AppErrorCodes, UserRoles } from '../enums';
 import { PasswordDetailRepository, UserRepository } from '../repository';
@@ -153,6 +154,77 @@ export class AuthService implements IAuthService {
 			};
 			return userDetailsDto;
 		} catch (err: any) {
+			if (err instanceof PrismaClientKnownRequestError) {
+				throw new AppError(
+					err.message,
+					AppErrorCodes.KNOWN_ORM_ERROR,
+					err.stack,
+				);
+			}
+			if (err instanceof PrismaClientUnknownRequestError) {
+				throw new AppError(
+					err.message,
+					AppErrorCodes.UNKNOWN_ORM_ERROR,
+					err.stack,
+				);
+			}
+
+			throw new AppError(
+				err.message,
+				AppErrorCodes.UNKNOWN_APP_ERROR,
+				err.stack,
+			);
+		}
+	}
+
+	async refreshAccessToken(
+		refreshToken: string,
+	): Promise<RefreshAccessTokenResponseDto | undefined | null> {
+		try {
+			const decodedRefreshTokenPayload =
+				this._authUtil.decodeToken(refreshToken);
+
+			if (!decodedRefreshTokenPayload) {
+				throw new BadRequestError(
+					'Refresh token has either expired or is invalid.',
+				);
+			}
+
+			const userId = decodedRefreshTokenPayload['sub'];
+			const user = await this._userRepository.fetchById(userId as string);
+
+			if (!user) {
+				throw new NotFoundError('User does not exist.');
+			}
+
+			const userRefreshToken = user.passowordDetail?.refreshToken;
+
+			if (userRefreshToken !== refreshToken) {
+				throw new BadRequestError('Invalid refresh token');
+			}
+
+			const accessTokenPayload: AccessTokenPayloadDto = {
+				sub: user.id,
+				role: user.roleId,
+			};
+			const refreshTokenPayload: JwtPayload = {
+				sub: user.id,
+			};
+			const newAccessToken =
+				this._authUtil.generateAccessToken(accessTokenPayload);
+			const newRefreshToken =
+				this._authUtil.generateRefreshToken(refreshTokenPayload);
+
+			await this._passwordDetailRepository.createRefreshToken(
+				user.id,
+				refreshToken,
+			);
+
+			return new RefreshAccessTokenResponseDto(newAccessToken, newRefreshToken);
+		} catch (err: any) {
+			if (err instanceof BadRequestError || err instanceof NotFoundError) {
+				throw err;
+			}
 			if (err instanceof PrismaClientKnownRequestError) {
 				throw new AppError(
 					err.message,

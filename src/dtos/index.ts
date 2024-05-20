@@ -16,3 +16,4 @@ export * from './delete-claim-response.dto';
 export * from './approve-claim-request.dto';
 export * from './decline-claim-request.dto';
 export * from './user-details.dto';
+export * from './refresh-access-token-response.dto';

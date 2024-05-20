@@ -2,6 +2,7 @@ import {
 	AccessTokenPayloadDto,
 	LoginUserRequestDto,
 	LoginUserResponseDto,
+	RefreshAccessTokenResponseDto,
 	RegisterUserRequestDto,
 	RegisterUserResponseDto,
 	UserDetailsDto,
@@ -18,6 +19,10 @@ export interface IAuthService {
 	): Promise<LoginUserResponseDto>;
 
 	getUserDetails(userId: string): Promise<UserDetailsDto | undefined | null>;
+
+	refreshAccessToken(
+		refreshToken: string,
+	): Promise<RefreshAccessTokenResponseDto | undefined | null>;
 
 	validateUserLocal(
 		email: string,

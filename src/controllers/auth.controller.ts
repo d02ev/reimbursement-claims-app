@@ -87,6 +87,22 @@ export class AuthController {
 		}
 	};
 
+	refreshAccessToken = async (
+		req: Request,
+		res: Response,
+		next: NextFunction,
+	) => {
+		try {
+			const refreshToken = req.query['t'];
+			const refreshAccessTokenResponseDto =
+				await this._authService.refreshAccessToken(refreshToken as string);
+
+			return res.status(HttpStatusCodes.OK).json(refreshAccessTokenResponseDto);
+		} catch (err: any) {
+			return next(err);
+		}
+	};
+
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	logout = (_: Request, res: Response, next: NextFunction) => {
 		try {

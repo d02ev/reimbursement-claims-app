@@ -17,6 +17,7 @@ authRoutes
 		passport.authenticate('jwt', { session: false }),
 		authController.me,
 	)
+	.get('/refresh', authController.refreshAccessToken)
 	.post(
 		'/logout',
 		passport.authenticate('jwt', { session: false }),

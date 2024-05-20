@@ -18,4 +18,12 @@ export class PasswordDetailRepository implements IPasswordDetailRepository {
 			data: { refreshToken },
 		});
 	}
+
+	async fetchByUserId(
+		userId: string,
+	): Promise<PasswordDetail | undefined | null> {
+		return await this._dbConfig.passwordDetail.findFirst({
+			where: { userId },
+		});
+	}
 }

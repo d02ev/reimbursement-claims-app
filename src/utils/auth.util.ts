@@ -39,4 +39,8 @@ export class AuthUtil {
 			expiresIn: this._refreshTokenExpiry,
 		});
 	};
+
+	decodeToken = (token: string): string | JwtPayload | null => {
+		return jwt.decode(token);
+	};
 }
