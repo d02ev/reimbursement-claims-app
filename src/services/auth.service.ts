@@ -207,20 +207,10 @@ export class AuthService implements IAuthService {
 				sub: user.id,
 				role: user.roleId,
 			};
-			const refreshTokenPayload: JwtPayload = {
-				sub: user.id,
-			};
 			const newAccessToken =
 				this._authUtil.generateAccessToken(accessTokenPayload);
-			const newRefreshToken =
-				this._authUtil.generateRefreshToken(refreshTokenPayload);
 
-			await this._passwordDetailRepository.createRefreshToken(
-				user.id,
-				refreshToken,
-			);
-
-			return new RefreshAccessTokenResponseDto(newAccessToken, newRefreshToken);
+			return new RefreshAccessTokenResponseDto(newAccessToken);
 		} catch (err: any) {
 			if (err instanceof BadRequestError || err instanceof NotFoundError) {
 				throw err;
