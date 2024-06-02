@@ -18,7 +18,7 @@ import { AppErrorCodes, UserRoles } from '../enums';
 import { PasswordDetailRepository, UserRepository } from '../repository';
 import { AuthUtil } from '../utils';
 import { AppError, BadRequestError, NotFoundError } from '../errors';
-import { JwtPayload } from 'jsonwebtoken';
+import { JsonWebTokenError, JwtPayload } from 'jsonwebtoken';
 
 export class AuthService implements IAuthService {
 	private readonly _userRepository: IUserRepository;
@@ -182,15 +182,9 @@ export class AuthService implements IAuthService {
 	): Promise<RefreshAccessTokenResponseDto | undefined | null> {
 		try {
 			const decodedRefreshTokenPayload =
-				this._authUtil.decodeToken(refreshToken);
+				this._authUtil.verifyRefreshToken(refreshToken);
 
-			if (!decodedRefreshTokenPayload) {
-				throw new BadRequestError(
-					'Refresh token has either expired or is invalid.',
-				);
-			}
-
-			const userId = decodedRefreshTokenPayload['sub'];
+			const userId = decodedRefreshTokenPayload?.sub;
 			const user = await this._userRepository.fetchById(userId as string);
 
 			if (!user) {
@@ -207,11 +201,24 @@ export class AuthService implements IAuthService {
 				sub: user.id,
 				role: user.roleId,
 			};
+			const refreshTokenPayload: JwtPayload = {
+				sub: user.id,
+			};
 			const newAccessToken =
 				this._authUtil.generateAccessToken(accessTokenPayload);
+			const newRefreshToken =
+				this._authUtil.generateRefreshToken(refreshTokenPayload);
+
+			await this._passwordDetailRepository.createRefreshToken(
+				user.id,
+				newRefreshToken,
+			);
 
 			return new RefreshAccessTokenResponseDto(newAccessToken);
 		} catch (err: any) {
+			if (err instanceof JsonWebTokenError) {
+				throw new BadRequestError(err.message);
+			}
 			if (err instanceof BadRequestError || err instanceof NotFoundError) {
 				throw err;
 			}
@@ -249,7 +256,7 @@ export class AuthService implements IAuthService {
 				return null;
 			}
 
-			const passwordMatch = await this._authUtil.comparePasswordHash(
+			const passwordMatch = await this._authUtil.comparePassword(
 				password,
 				user.passowordDetail?.passwordHash!,
 			);

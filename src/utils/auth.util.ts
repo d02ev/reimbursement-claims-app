@@ -1,5 +1,5 @@
-import bcrypt from 'bcrypt';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import { hash, compare } from 'bcrypt';
+import { JwtPayload, verify, sign } from 'jsonwebtoken';
 import { AccessTokenPayloadDto } from '../dtos';
 
 export class AuthUtil {
@@ -18,29 +18,31 @@ export class AuthUtil {
 	}
 
 	createPasswordHash = async (password: string): Promise<string> => {
-		return await bcrypt.hash(password, this._hashSaltRounds);
+		return await hash(password, this._hashSaltRounds);
 	};
 
-	comparePasswordHash = async (
-		normalPassword: string,
-		passwordHash: string,
+	comparePassword = async (
+		password: string,
+		hash: string,
 	): Promise<boolean> => {
-		return await bcrypt.compare(normalPassword, passwordHash);
+		return await compare(password, hash);
 	};
 
 	generateAccessToken = (payload: AccessTokenPayloadDto): string => {
-		return jwt.sign(payload, this._accessTokenSecretKey, {
+		return sign(payload, this._accessTokenSecretKey, {
 			expiresIn: this._accessTokenExpiry,
 		});
 	};
 
 	generateRefreshToken = (payload: JwtPayload): string => {
-		return jwt.sign(payload, this._refreshTokenSecretKey, {
+		return sign(payload, this._refreshTokenSecretKey, {
 			expiresIn: this._refreshTokenExpiry,
 		});
 	};
 
-	decodeToken = (token: string): string | JwtPayload | null => {
-		return jwt.decode(token);
+	verifyRefreshToken = (token: string): string | JwtPayload | null => {
+		return verify(token, this._refreshTokenSecretKey, {
+			ignoreExpiration: false,
+		});
 	};
 }
