@@ -16,10 +16,10 @@ const app: Application = express();
 app.use(
 	cors({
 		origin: process.env.CORS_ORIGIN,
-		credentials: true,
-		methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+		credentials: Boolean(process.env.CORS_ALLOW_CREDS),
+		methods: process.env.CORS_ALLOWED_METHODS,
 		optionsSuccessStatus: 204,
-		preflightContinue: true,
+		preflightContinue: Boolean(process.env.PREFLIGHT),
 	}),
 );
 app.use(cookieParser());
