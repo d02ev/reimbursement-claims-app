@@ -17,9 +17,6 @@ app.use(
 	cors({
 		origin: process.env.CORS_ORIGIN,
 		credentials: Boolean(process.env.CORS_ALLOW_CREDS),
-		methods: process.env.CORS_ALLOWED_METHODS,
-		optionsSuccessStatus: 204,
-		preflightContinue: Boolean(process.env.PREFLIGHT),
 	}),
 );
 app.use(cookieParser());
